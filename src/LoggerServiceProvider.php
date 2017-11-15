@@ -47,6 +47,13 @@ class LoggerServiceProvider implements ServiceProviderInterface
     public function register(Container $dic)
     {
 
+
+        // ------------------------------------------
+        // Configuration stuff
+        // ------------------------------------------
+
+
+
         $dic['Logger.loglevel'] = function($dic) {
             return $this->loglevel;
         };
@@ -59,10 +66,18 @@ class LoggerServiceProvider implements ServiceProviderInterface
             return $this->logname;
         };
 
+        /**
+         * @return array
+         */
+        $dic['Logger.Environment'] = function($dic) {
+            return $_SERVER;
+        };
 
 
 
-
+        // ------------------------------------------
+        // Monolog Handlers
+        // ------------------------------------------
 
 
         /**
@@ -118,12 +133,12 @@ class LoggerServiceProvider implements ServiceProviderInterface
         };
 
 
-        /**
-         * @return array
-         */
-        $dic['Logger.Environment'] = function($dic) {
-            return $_SERVER;
-        };
+
+
+        // ------------------------------------------
+        // Monolog Processors
+        // ------------------------------------------
+
 
 
         /**
@@ -159,6 +174,12 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
 
+        // ------------------------------------------
+        // Monolog itself
+        // ------------------------------------------
+
+
+
         /**
          * @return Monolog
          */
@@ -170,6 +191,11 @@ class LoggerServiceProvider implements ServiceProviderInterface
             return new Monolog( $logname, $handlers, $processors );
         };
 
+
+
+        // ------------------------------------------
+        // Other helpers
+        // ------------------------------------------
 
 
         /**
