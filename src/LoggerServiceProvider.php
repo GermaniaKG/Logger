@@ -1,5 +1,5 @@
 <?php
-namespace Germania\ServiceProviders;
+namespace Germania\Logger;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
