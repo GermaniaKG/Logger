@@ -220,7 +220,8 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
         // For statistic purposes
-        if ($dic['Logger.log_runtime']):
+        $log_runtime = $dic['Logger.do_log_runtime'];
+        if ($log_runtime):
             $server  = $dic['Logger.Environment'];
             $handler = $dic->raw('Logger.LogRuntime');
 
