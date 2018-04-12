@@ -6,7 +6,7 @@
 ## Installation
 
 ```bash
-$ composer require germania-kg/logger
+$ composer require germania-kg/logger:^1.1
 ```
 
 Alternatively, add this package directly to your *composer.json:*
