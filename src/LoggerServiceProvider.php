@@ -62,7 +62,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
             return $this->logfile;
         };
 
-        $dic['Logger.log_runtime'] = function($dic) {
+        $dic['Logger.do_log_runtime'] = function($dic) {
             return $this->log_runtime;
         };
 
