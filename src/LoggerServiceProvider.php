@@ -206,13 +206,21 @@ class LoggerServiceProvider implements ServiceProviderInterface
         // Other helpers
         // ------------------------------------------
 
+        $dic['Logger.LogRuntime.start'] = function($dic) {
+            return $server['REQUEST_TIME_FLOAT'];
+        };
 
         /**
          * @param  float $start_time
          * @return callable
          */
-        $dic['Logger.LogRuntime'] = $dic->protect(function($start_time) use ($dic) {
+        $dic['Logger.LogRuntime'] = $dic->protect(function() use ($dic) {
+            if (!$log_runtime = $dic['Logger.do_log_runtime']):
+                return;
+            endif;
+
             $logger = $dic['Logger'];
+            $start_time = $dic['Logger.LogRuntime.start'];
             $runtime_ms = ((microtime("float") - $start_time) * 1000);
 
             $logger->info( "Finished", [ 'runtime' => $runtime_ms . "ms" ]);
@@ -220,12 +228,8 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
         // For statistic purposes
-        $log_runtime = $dic['Logger.do_log_runtime'];
-        if ($log_runtime):
-            $server  = $dic['Logger.Environment'];
-            $handler = $dic->raw('Logger.LogRuntime');
-
-            register_shutdown_function($handler, $server['REQUEST_TIME_FLOAT']);
+        if ($this->log_runtime):
+            register_shutdown_function($dic->raw('Logger.LogRuntime'));
         endif;
     }
 }
