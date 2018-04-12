@@ -62,6 +62,14 @@ class LoggerServiceProvider implements ServiceProviderInterface
             return $this->logfile;
         };
 
+        $dic['Logger.log_runtime'] = function($dic) {
+            return $this->log_runtime;
+        };
+
+        $dic['Logger.is_dev'] = function($dic) {
+            return $this->is_dev;
+        };
+
         $dic['Logger.name'] = function($dic) {
             return $this->logname;
         };
@@ -110,8 +118,9 @@ class LoggerServiceProvider implements ServiceProviderInterface
          */
         $dic['Logger.Handler.StdErr'] = function($dic) {
             $loglevel = $dic['Logger.loglevel'];
+            $is_dev   = $dic['Logger.is_dev'];
 
-            if ($this->is_dev):
+            if ($is_dev):
                 $stderr_handler = new StreamHandler('php://stderr', $loglevel);
                 $stderr_handler->setFormatter(new ColoredLineFormatter());
                 return $stderr_handler;
@@ -211,7 +220,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
         // For statistic purposes
-        if ($this->log_runtime) :
+        if ($dic['Logger.log_runtime']):
             $server  = $dic['Logger.Environment'];
             $handler = $dic->raw('Logger.LogRuntime');
 
