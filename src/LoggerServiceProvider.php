@@ -207,7 +207,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         // ------------------------------------------
 
         $dic['Logger.LogRuntime.start'] = function($dic) {
-            return $server['REQUEST_TIME_FLOAT'];
+            return $_SERVER['REQUEST_TIME_FLOAT'];
         };
 
         /**
