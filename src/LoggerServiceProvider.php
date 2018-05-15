@@ -25,20 +25,21 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string  $logname      The default Logger channel name
-     * @param string  $logfile      The logfile to use
-     * @param int     $loglevel     The log level
-     * @param bool    $is_dev       Wether this environment is "Development" or not
-     * @param bool    $log_runtime  Wether to log the script runtime
+     * @param string  $logname        The default Logger channel name
+     * @param string  $logfile        The logfile to use
+     * @param int     $loglevel       The log level
+     * @param bool    $is_dev         Wether this environment is "Development" or not
+     * @param bool    $log_runtime    Wether to log the script runtime
+     * @param bool    $logfile_count  Maximum count of rotating logfiles. Defaults to 0 (indefinite)
      */
     public function __construct( $logname, $logfile, $loglevel, $is_dev, $log_runtime, $logfile_count = null )
     {
-        $this->logname     = $logname;
-        $this->logfile     = $logfile;
+        $this->logname       = $logname;
+        $this->logfile       = $logfile;
         $this->logfile_count = $logfile_count ?: $this->logfile_count;
-        $this->loglevel    = $loglevel;
-        $this->is_dev      = (bool) $is_dev;
-        $this->log_runtime = (bool) $log_runtime;
+        $this->loglevel      = $loglevel;
+        $this->is_dev        = (bool) $is_dev;
+        $this->log_runtime   = (bool) $log_runtime;
     }
 
 
