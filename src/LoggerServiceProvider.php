@@ -19,24 +19,27 @@ class LoggerServiceProvider implements ServiceProviderInterface
     public $logname;
     public $loglevel;
     public $logfile;
+    public $logfile_count = 0;
     public $is_dev;
     public $log_runtime;
 
 
     /**
-     * @param string  $logname      The default Logger channel name
-     * @param string  $logfile      The logfile to use
-     * @param int     $loglevel     The log level
-     * @param bool    $is_dev       Wether this environment is "Development" or not
-     * @param bool    $log_runtime  Wether to log the script runtime
+     * @param string  $logname        The default Logger channel name
+     * @param string  $logfile        The logfile to use
+     * @param int     $loglevel       The log level
+     * @param bool    $is_dev         Wether this environment is "Development" or not
+     * @param bool    $log_runtime    Wether to log the script runtime
+     * @param bool    $logfile_count  Maximum count of rotating logfiles. Defaults to 0 (indefinite)
      */
-    public function __construct( $logname, $logfile, $loglevel, $is_dev, $log_runtime )
+    public function __construct( $logname, $logfile, $loglevel, $is_dev, $log_runtime, $logfile_count = null )
     {
-        $this->logname     = $logname;
-        $this->logfile     = $logfile;
-        $this->loglevel    = $loglevel;
-        $this->is_dev      = (bool) $is_dev;
-        $this->log_runtime = (bool) $log_runtime;
+        $this->logname       = $logname;
+        $this->logfile       = $logfile;
+        $this->logfile_count = $logfile_count ?: $this->logfile_count;
+        $this->loglevel      = $loglevel;
+        $this->is_dev        = (bool) $is_dev;
+        $this->log_runtime   = (bool) $log_runtime;
     }
 
 
@@ -60,6 +63,10 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
         $dic['Logger.logfile'] = function($dic) {
             return $this->logfile;
+        };
+
+        $dic['Logger.logfile_count'] = function($dic) {
+            return $this->logfile_count;
         };
 
         $dic['Logger.do_log_runtime'] = function($dic) {
@@ -92,8 +99,9 @@ class LoggerServiceProvider implements ServiceProviderInterface
          * @return  RotatingFileHandler
          */
         $dic['Logger.Handler.RotatingFiles'] = function($dic) {
-            $loglevel = $dic['Logger.loglevel'];
-            $logfile  = $dic['Logger.logfile'];
+            $loglevel      = $dic['Logger.loglevel'];
+            $logfile       = $dic['Logger.logfile'];
+            $logfile_count = $dic['Logger.logfile_count'];
 
             // Writeable check
             if ($logdir = dirname($logfile)
@@ -108,7 +116,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
                 die("Logfile directory not writeable.");
             endif;
 
-            return new RotatingFileHandler($logfile, 0, $loglevel);
+            return new RotatingFileHandler($logfile, $logfile_count, $loglevel);
         };
 
 
