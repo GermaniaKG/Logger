@@ -1,6 +1,6 @@
 {
 	"name": "germania-kg/logger",
-	"description": "Pimple Service Provider for Logging with Monolog",
+	"description": "Our Company's default logging solution: Pimple Service Provider for Logging with Monolog",
 
 	"license": "MIT",
 
@@ -26,13 +26,12 @@
 
 	"require": {
 			"pimple/pimple": "^3.0.0",
-		  "monolog/monolog": "^1.16.0",
-		  "bramus/monolog-colored-line-formatter": "^2.0"
+		  "monolog/monolog": "^1.16.0"
 	},
 
 	"require-dev": {
 			"php-coveralls/php-coveralls": "^2.0",
-			"phpunit/phpunit": "^5.2|^6.0"
+			"phpunit/phpunit": "^5.7|^6.0"
 	}
 
 
