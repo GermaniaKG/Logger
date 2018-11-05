@@ -29,21 +29,18 @@ use Germania\Logger\LoggerServiceProvider;
 
 // Have your Pimple or Slim3 Container at hand
 $dic = new \Pimple\Container;
-
-$log_name     = "My App";
-$anonymize_ip = true;
-$server_data  = $_SERVER;
-
+$dic->register( new LoggerServiceProvider( "My App" );
+               
+// Alternatively, pass custom server data environment,
+// disable IP address anonymization               
 $dic->register( new LoggerServiceProvider(
-  $log_name,
-  $server_data,
-  $anonymize_ip
+  "My App",
+  $_SERVER,
+  false
 ));
-
-
 ```
 
-### Services
+### Services provided
 
 ```php
 // This Monolog Logger instance is your PSR-3 Logger
@@ -58,14 +55,6 @@ $dic['Logger.Handlers']
 // Default: just Monolog's "WebProcessor" with "ip", "method" and "url"
 $dic['Logger.Processors']
  
-```
-
-### Usage:
-
-```php
-$logger = $dic['Logger'];
-
-$logger->info("Hooray!");
 ```
 
 
@@ -142,6 +131,47 @@ $dic->register( new SlackLoggerServiceProvider(
 ));
 
 
+```
+
+## Example
+
+```php
+<?php
+use Germania\Logger\LoggerServiceProvider;
+use Germania\Logger\FileLoggerServiceProvider;
+use Monolog\Logger;
+
+// 
+// 1. Basic setup
+//
+$log_name     = "My App";
+$anonymize_ip = true;
+$server_data  = $_SERVER;
+
+$dic->register( new LoggerServiceProvider(
+  $log_name,
+  $server_data,
+  $anonymize_ip
+));
+
+
+//
+// 2. The 'Logger' service won't do anything right here.
+// Adding a specialized Service Provider is needed:
+//
+$max_files_count = 30;
+$dic->register( new FileLoggerServiceProvider(
+  "var/log/app.log",
+  $max_files_count,
+  Logger::DEBUG
+));
+
+
+// 
+// 3. Now you can grab your PSR-3 Logger:
+//
+$logger = $dic['Logger'];
+$logger->info("Hooray!");
 ```
 
 
