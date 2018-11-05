@@ -6,6 +6,7 @@ use Pimple\ServiceProviderInterface;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Bramus\Monolog\Formatter\ColoredLineFormatter;
 
 class StreamLoggerServiceProvider implements ServiceProviderInterface
 {
@@ -62,7 +63,10 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
             $stream     = $this->stream;
             $loglevel   = $this->loglevel;
 
-            return new StreamHandler($stream, $loglevel);
+            $stderr_handler = new StreamHandler($stream, $loglevel);
+            $stderr_handler->setFormatter(new ColoredLineFormatter());
+
+            return $stderr_handler;
         };
 
     }
