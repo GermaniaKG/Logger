@@ -49,11 +49,11 @@ $dic['Logger']
 // Monolog handlers array; 
 // Empty per default; will be filled by one or more 
 // of the specialised Service Providers below.
-$dic['Logger.Handlers']
+$dic['Monolog.Handlers']
   
 // Monolog Processors array;
 // Default: just Monolog's "WebProcessor" with "ip", "method" and "url"
-$dic['Logger.Processors']
+$dic['Monolog.Processors']
  
 ```
 

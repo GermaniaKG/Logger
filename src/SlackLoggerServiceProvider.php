@@ -60,8 +60,8 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return array
          */
-        $dic->extend('Logger.Handlers', function(array $handlers, $dic) {
-            $handlers[] = $dic['Logger.Handlers.SlackHandler'];
+        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+            $handlers[] = $dic['Monolog.Handlers.SlackHandler'];
             return $handlers;
         });
 
@@ -75,7 +75,7 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return SlackHandler
          */
-        $dic['Logger.Handlers.SlackHandler'] = function( $dic) {
+        $dic['Monolog.Handlers.SlackHandler'] = function( $dic) {
 
             // As hardcoded in SlackHandler class
             $useAttachment          = true;              // Whether the message should be added to Slack as attachment (plain text otherwise)

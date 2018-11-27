@@ -50,8 +50,8 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return array
          */
-        $dic->extend('Logger.Handlers', function(array $handlers, $dic) {
-            $handlers[] = $dic['Logger.Handlers.SwiftMailerHandler'];
+        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+            $handlers[] = $dic['Monolog.Handlers.SwiftMailerHandler'];
             return $handlers;
         });
 
@@ -71,7 +71,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return FingersCrossedHandler
          */
-        $dic['Logger.Handlers.SwiftMailerHandler'] = function( $dic) {
+        $dic['Monolog.Handlers.SwiftMailerHandler'] = function( $dic) {
             $mailer   = $dic['SwiftMailer'];
 
             // The mail subject will be used for LineFormatter
