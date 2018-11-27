@@ -14,7 +14,7 @@ class ClimateLoggerServiceProvider implements ServiceProviderInterface
     /**
      * @var int
      */
-    public $loglevel = Logger::DEBUG;
+    public $loglevel = MonologLogger::DEBUG;
 
 
     /**
