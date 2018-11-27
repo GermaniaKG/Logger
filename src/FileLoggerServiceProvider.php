@@ -55,8 +55,8 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return array
          */
-        $dic->extend('Logger.Handlers', function(array $handlers, $dic) {
-            $handlers[] = $dic['Logger.Handlers.RotatingFileHandler'];
+        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+            $handlers[] = $dic['Monolog.Handlers.RotatingFileHandler'];
             return $handlers;
         });
 
@@ -64,7 +64,7 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return RotatingFileHandler
          */
-        $dic['Logger.Handlers.RotatingFileHandler'] = function( $dic) {
+        $dic['Monolog.Handlers.RotatingFileHandler'] = function( $dic) {
 
             $logfile   = $this->logfile;
             $max_files = $this->max_files;

@@ -4,8 +4,9 @@ namespace Germania\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-use Monolog\Logger;
+use Monolog\Logger as MonologLogger;
 use Monolog\Processor\WebProcessor;
+use Monolog\Processor\PsrLogMessageProcessor;
 
 class LoggerServiceProvider implements ServiceProviderInterface
 {
@@ -47,11 +48,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
          * @return \Monolog\Logger
          */
         $dic['Logger'] = function($dic) {
-            $handlers   = $dic['Logger.Handlers'];
-            $processors = $dic['Logger.Processors'];
-            $title      = $this->logger_name;
-
-            return new Logger( $title, $handlers, $processors);
+            return $dic['Monolog.Psr3Logger'];
         };
 
 
@@ -66,9 +63,21 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
         /**
+         * @return MonologLogger
+         */
+        $dic['Monolog.Psr3Logger'] = function( $dic ) {
+            $handlers   = $dic['Monolog.Handlers'];
+            $processors = $dic['Monolog.Processors'];
+            $title      = $this->logger_name;
+
+            return new MonologLogger( $title, $handlers, $processors);
+        };
+
+
+        /**
          * @return array
          */
-        $dic['Logger.Handlers'] = function( $dic ) {
+        $dic['Monolog.Handlers'] = function( $dic ) {
             return array();
         };
 
@@ -77,22 +86,31 @@ class LoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return array
          */
-        $dic['Logger.Processors'] = function($dic) {
+        $dic['Monolog.Processors'] = function($dic) {
             return array(
-                $dic['Logger.Processors.WebProcessor']
+                $dic['Monolog.Processors.PsrLogMessages'],
+                $dic['Monolog.Processors.WebProcessor']
             );
+        };
+
+
+        /**
+         * @see https://github.com/Seldaek/monolog/blob/master/src/Monolog/Processor/PsrLogMessageProcessor.php
+         * @return PsrLogMessageProcessor
+         */
+        $dic['Monolog.Processors.PsrLogMessages'] = function($dic) {
+            return new PsrLogMessageProcessor( null, true);
         };
 
 
         /**
          * @return WebProcessor
          */
-        $dic['Logger.Processors.WebProcessor'] = function($dic) {
+        $dic['Monolog.Processors.WebProcessor'] = function($dic) {
             $server_data  = $dic['Logger.Environment'];
-            $extra_fields = $dic['Logger.Processors.Web.extraFields'];
+            $extra_fields = $dic['Monolog.Processors.WebProcessor.extraFields'];
             return new WebProcessor( $server_data, $extra_fields );
         };
-
 
 
         /**
@@ -100,19 +118,13 @@ class LoggerServiceProvider implements ServiceProviderInterface
          *
          * @return array
          */
-        $dic['Logger.Processors.Web.extraFields'] = function($dic) {
+        $dic['Monolog.Processors.WebProcessor.extraFields'] = function($dic) {
             return [
                 'http_method',
                 'url',
                 'ip'
             ];
         };
-
-
-
-
-
-
 
 
     }
