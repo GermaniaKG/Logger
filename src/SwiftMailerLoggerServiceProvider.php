@@ -15,19 +15,27 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
 {
 
     /**
+     * Loglevel for FingersCrossedHandler
      * @var int
      */
-    public $loglevel = Logger::WARNING;
+    public $outer_loglevel = Logger::WARNING;
+
+    /**
+     * Loglevel for SwiftMailerHandler
+     * @var int
+     */
+    public $inner_loglevel = Logger::DEBUG;
+
 
 
     /**
-     * @param int|null $loglevel [description]
+     * @param int|null $outer_loglevel Loglevel for FingersCrossedHandler. Default: Logger::WARNING
+     * @param int|null $inner_loglevel Loglevel for SwiftMailerHandler. Default: Logger::DEBUG
      */
-    public function __construct( int $loglevel = null )
+    public function __construct( int $outer_loglevel = Logger::WARNING,  int $inner_loglevel = Logger::DEBUG )
     {
-        if (!is_null($loglevel)) {
-            $this->loglevel = $loglevel;
-        }
+        $this->outer_loglevel = $outer_loglevel;
+        $this->inner_loglevel = $inner_loglevel;
     }
 
 
@@ -79,12 +87,12 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
             $message  = $dic['SwiftMailer.HtmlMessage'];
             $message->setSubject("[%channel%.%level_name%] %message%\n");
 
-            // Set loglevel for this handler to DEBUG to gather ALL information
-            $mailerHandler = new SwiftMailerHandler( $mailer, $message, Logger::DEBUG );
+            // Set loglevel for this handler to $inner_loglevel (usually DEBUG) to gather ALL information
+            $mailerHandler = new SwiftMailerHandler( $mailer, $message, $this->inner_loglevel);
             $mailerHandler->setFormatter( new HtmlFormatter );
 
             // Build handler "sandwich"
-            return new FingersCrossedHandler( new BufferHandler( $mailerHandler ), $this->loglevel);
+            return new FingersCrossedHandler( new BufferHandler( $mailerHandler ), $this->outer_loglevel);
         };
 
 
