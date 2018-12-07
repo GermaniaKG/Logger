@@ -52,6 +52,12 @@ class LoggerServiceProvider implements ServiceProviderInterface
         };
 
 
+        /**
+         * @return string
+         */
+        $dic['Logger.name'] = function($dic) {
+            return $this->logger_name;
+        };
 
 
         /**
