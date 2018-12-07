@@ -52,6 +52,12 @@ class LoggerServiceProvider implements ServiceProviderInterface
         };
 
 
+        /**
+         * @return string
+         */
+        $dic['Logger.name'] = function($dic) {
+            return $this->logger_name;
+        };
 
 
         /**
@@ -68,7 +74,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         $dic['Monolog.Psr3Logger'] = function( $dic ) {
             $handlers   = $dic['Monolog.Handlers'];
             $processors = $dic['Monolog.Processors'];
-            $title      = $this->logger_name;
+            $title      = $dic['Logger.name'];
 
             return new MonologLogger( $title, $handlers, $processors);
         };
