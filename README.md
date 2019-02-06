@@ -4,14 +4,19 @@
 **Pimple Service Provider for Logging with Monolog.**
 
 
+[![Packagist](https://img.shields.io/packagist/v/germania-kg/logger.svg?style=flat)](https://packagist.org/packages/germania-kg/logger)
+[![PHP version](https://img.shields.io/packagist/php-v/germania-kg/logger.svg)](https://packagist.org/packages/germania-kg/logger)
+[![Build Status](https://img.shields.io/travis/GermaniaKG/Logger.svg?label=Travis%20CI)](https://travis-ci.org/GermaniaKG/Logger)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/GermaniaKG/Logger/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/Logger/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/GermaniaKG/Logger/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/Logger/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/GermaniaKG/Logger/badges/build.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/Logger/build-status/master)
 
 
-## Installation
+## Installation with Composer
 
 ```bash
-$ composer require germania-kg/logger:^2.0
+$ composer require germania-kg/logger
 ```
-
 Alternatively, add this package directly to your *composer.json:*
 
 ```json
@@ -175,7 +180,6 @@ $logger->info("Hooray!");
 ```
 
 
-
 ## Development
 
 ```bash
@@ -184,13 +188,12 @@ $ cd Logger
 $ composer install
 ```
 
-
-
 ## Unit tests
 
-Either copy `phpunit.xml.dist` to `phpunit.xml` and adapt to your needs, or leave as is. 
-Run [PhpUnit](https://phpunit.de/) like this:
+Either copy `phpunit.xml.dist` to `phpunit.xml` and adapt to your needs, or leave as is. Run [PhpUnit](https://phpunit.de/) test or composer scripts like this:
 
 ```bash
+$ composer test
+# or
 $ vendor/bin/phpunit
 ```
