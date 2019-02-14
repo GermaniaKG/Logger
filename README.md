@@ -12,6 +12,7 @@
 [![Build Status](https://scrutinizer-ci.com/g/GermaniaKG/Logger/badges/build.png?b=master)](https://scrutinizer-ci.com/g/GermaniaKG/Logger/build-status/master)
 
 
+
 ## Installation with Composer
 
 ```bash
