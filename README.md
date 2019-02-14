@@ -101,7 +101,7 @@ $dic->register( new StreamLoggerServiceProvider("php://stderr", Logger::WARNING)
 
 ### Log using SwiftMailer
 
-This service requires service definitions for **SwiftMailer** and **SwiftMailer.HtmlMessage**
+This service requires service definitions for **SwiftMailer** and **SwiftMailer.HtmlMessage**. Germania KG's **[germania-kg/mailer](https://github.com/germaniaKG/Mailer)** will provide those.
 
 ```php
 <?php
@@ -110,6 +110,22 @@ use Monolog\Logger;
 
 $dic->register( 
   new SwiftMailerLoggerServiceProvider( Logger::WARNING ) 
+);
+```
+
+
+
+### Log using CLImate Logger
+
+This requires **[CLImate](http://climate.thephpleague.com/)**, available with Composer: **[league/climate](https://github.com/thephpleague/climate)**
+
+```php
+<?php
+use Germania\Logger\ClimateLoggerServiceProvider;
+use Monolog\Logger;
+
+$dic->register( 
+  new ClimateLoggerServiceProvider( Logger::INFO ) 
 );
 ```
 

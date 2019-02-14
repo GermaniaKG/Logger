@@ -46,14 +46,19 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
     public function register(Container $dic)
     {
 
-        if (!$dic->offsetExists( "SwiftMailer")) {
+        if (!$dic->offsetExists( "SwiftMailer")) :
             throw new \RuntimeException("This service provider requires a 'SwiftMailer' service.");
-        }
+        endif;
 
-        if (!$dic->offsetExists( "SwiftMailer.HtmlMessage")) {
+        if (!$dic->offsetExists( "SwiftMailer.HtmlMessage")) :
             throw new \RuntimeException("This service provider requires a 'SwiftMailer.HtmlMessage' service.");
-        }
+        endif;
 
+
+        // Make sure there's a 'Monolog.Handlers' service
+        if (!$dic->offsetExists( 'Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        endif;
 
         /**
          * @return array
