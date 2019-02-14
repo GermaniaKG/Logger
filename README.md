@@ -17,14 +17,6 @@
 ```bash
 $ composer require germania-kg/logger
 ```
-Alternatively, add this package directly to your *composer.json:*
-
-```json
-"require": {
-    "germania-kg/logger": "^2.0"
-}
-```
-
 ## Setup
 
 
