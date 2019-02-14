@@ -43,13 +43,26 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function testExceptionOnMissingRequirements( )
+	public function testExceptionOnMissingSwiftMailer( )
 	{
 
 		$loglevel  = 100;
 		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
 
 		$container = new Container;
+		$this->expectException( \Exception::class );
+		$container->register( $sut );
+	}
+
+
+	public function testExceptionOnMissingSwiftMailerHtmlMessage( )
+	{
+
+		$loglevel  = 100;
+		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
+
+		$container = new Container;
+		$container['SwiftMailer'] = true;
 		$this->expectException( \Exception::class );
 		$container->register( $sut );
 	}
