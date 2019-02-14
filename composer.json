@@ -34,7 +34,7 @@
     "require-dev": {
         "php-coveralls/php-coveralls": "^2.0",
         "phpunit/phpunit": "^5.7|^6.0|^7.0",
-        "league/climate": "^3.5",
+        "league/climate": "^3.4",
         "germania-kg/mailer": "^1.0"
     },
 
