@@ -47,6 +47,13 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
     {
 
 
+
+        // Make sure there's a 'Monolog.Handlers' service
+        if (!$dic->offsetExists( 'Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        endif;
+
+        
         /**
          * @return array
          */
