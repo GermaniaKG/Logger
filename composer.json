@@ -35,7 +35,8 @@
         "php-coveralls/php-coveralls": "^2.0",
         "phpunit/phpunit": "^5.7|^6.0|^7.0",
         "league/climate": "^3.4",
-        "germania-kg/mailer": "^1.0"
+        "germania-kg/mailer": "^1.0",
+        "cmdisp/monolog-microsoft-teams": "^1.0"        
     },
 
     "scripts": {
@@ -47,6 +48,7 @@
     },
 
     "suggest": {
+        "cmdisp/monolog-microsoft-teams": "Monolog Handler for sending messages to Microsoft Teams channels",
         "germania-kg/mailer": "Pimple Service Provider for email and SwiftMailer services. Required by 'SwiftMailerLoggerServiceProvider'.",
         "league/climate": "PHP's best friend for the terminal. Required by 'ClimateLoggerServiceProvider'"
     }
