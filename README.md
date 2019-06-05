@@ -124,6 +124,30 @@ $dic->register(
 
 
 
+### Log to Microsoft Teams
+
+This requires CM DISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
+
+While their original *TeamsLogHandler* class just uses the `$record['message']`, this package's *HtmlFormattedTeamsLogHandler* class extension uses the `$record['formatted']` string.
+
+```php
+<?php
+use Germania\Logger\TeamsLoggerServiceProvider;
+use Monolog\Logger;
+
+$incoming_webhook_url="https://outlook.office.com/webhook/many-many-letters";
+
+$dic->register( new TeamsLoggerServiceProvider(
+  $incoming_webhook_url,
+  Logger::NOTICE
+));
+  
+```
+
+
+
+
+
 ### Log to Slack channel
 
 For more information, see these links:
@@ -187,6 +211,7 @@ $dic->register( new FileLoggerServiceProvider(
 $logger = $dic['Logger'];
 $logger->info("Hooray!");
 ```
+
 
 
 ## Development
