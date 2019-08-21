@@ -31,12 +31,13 @@ class HtmlFormattedTeamsLogHandler extends TeamsLogHandler
 
 
     /**
-     * Uses the _formatted_ entry rather than the 
+     * Uses the _formatted_ entry rather than the orginal.
      * @inheritDoc
      */
     protected function getMessage(array $record)
     {
         return new TeamsMessage([
+            'title' => $record['level_name'] . ': ' . $record['message'],
             'text' => $record['formatted'],
 
             // This was the original:
