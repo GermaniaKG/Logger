@@ -15,14 +15,10 @@
 
 ## Installation with Composer
 
-The major release 4 requires PHP 7.2 and supports Monolog 2.
+The major release 4 requires PHP 7.2 and the older release 3 supports Monolog 2.
 
 ```bash
-# Older PHP
-$ composer require germania-kg/logger:^3.0
-
-# PHP 7.2+
-$ composer require germania-kg/logger:^4.0
+$ composer require germania-kg/logger
 ```
 ## Setup
 
