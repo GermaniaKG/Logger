@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {	
 
+
 	/**
 	 * @dataProvider provideCtorArgs
 	 */
@@ -32,13 +33,20 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
+	public function createSut()
+	{
+		return new LoggerServiceProvider("logname", array(), true);
+	}
+
+
+
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
 	public function testServiceFileTypes( $service, $internal_type)
 	{
 
-		$sut = new LoggerServiceProvider("logname", array(), true);
+		$sut = $this->createSut();
 
 		$container = new Container;
 		$container->register( $sut );
@@ -63,7 +71,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function testServiceInterfaces( $service, $expected_interface)
 	{
 
-		$sut = new LoggerServiceProvider("logname", array(), true);
+		$sut = $this->createSut();
 
 		$container = new Container;
 		$container->register( $sut );
@@ -79,6 +87,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 			[ 'Monolog.Psr3Logger', LoggerInterface::class ]
 		);
 	}
+
 
 
 }
