@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa07cef2485f17405c243f68a9280233",
+    "content-hash": "047f8d612517b50b4feb60a4eaea8adc",
     "packages": [
         {
             "name": "bramus/ansi-php",
@@ -87,6 +87,55 @@
             ],
             "description": "Colored Line Formatter for Monolog",
             "time": "2019-02-12T13:30:46+00:00"
+        },
+        {
+            "name": "cmdisp/monolog-microsoft-teams",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GermaniaKG/monolog-microsoft-teams.git",
+                "reference": "138d441a1a5029eb2da006817d2b7575e696c44e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GermaniaKG/monolog-microsoft-teams/zipball/138d441a1a5029eb2da006817d2b7575e696c44e",
+                "reference": "138d441a1a5029eb2da006817d2b7575e696c44e",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "^1.23|^2.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^5.7|^6.0|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CMDISP\\MonologMicrosoftTeams\\": "src/"
+                }
+            },
+            "scripts": {
+                "phpunit": [
+                    "phpunit --colors=auto --coverage-text"
+                ],
+                "watch": [
+                    "phpunit-watcher watch"
+                ],
+                "test": [
+                    "@phpunit"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Monolog Handler for sending messages to Microsoft Teams using the Incoming Webhook connector",
+            "support": {
+                "source": "https://github.com/GermaniaKG/monolog-microsoft-teams/tree/master"
+            },
+            "time": "2019-09-02T08:56:58+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -317,55 +366,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "cmdisp/monolog-microsoft-teams",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/GermaniaKG/monolog-microsoft-teams.git",
-                "reference": "138d441a1a5029eb2da006817d2b7575e696c44e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/GermaniaKG/monolog-microsoft-teams/zipball/138d441a1a5029eb2da006817d2b7575e696c44e",
-                "reference": "138d441a1a5029eb2da006817d2b7575e696c44e",
-                "shasum": ""
-            },
-            "require": {
-                "monolog/monolog": "^1.23|^2.0",
-                "php": "^7.2"
-            },
-            "require-dev": {
-                "ext-curl": "*",
-                "php-coveralls/php-coveralls": "^2.0",
-                "phpunit/phpunit": "^5.7|^6.0|^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CMDISP\\MonologMicrosoftTeams\\": "src/"
-                }
-            },
-            "scripts": {
-                "phpunit": [
-                    "phpunit --colors=auto --coverage-text"
-                ],
-                "watch": [
-                    "phpunit-watcher watch"
-                ],
-                "test": [
-                    "@phpunit"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Monolog Handler for sending messages to Microsoft Teams using the Incoming Webhook connector",
-            "support": {
-                "source": "https://github.com/GermaniaKG/monolog-microsoft-teams/tree/master"
-            },
-            "time": "2019-09-02T08:56:58+00:00"
-        },
         {
             "name": "doctrine/instantiator",
             "version": "1.2.0",
