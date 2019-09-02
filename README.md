@@ -130,6 +130,36 @@ $dic->register(
 
 This requires CM DISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
+
+
+---
+
+**IMPORTANT NOTICE: **
+**CM DISP's *monolog-microsoft-teams* package does not yet support Monolog 2.** 
+
+The support may be baked in one day when my [**pull request**](https://github.com/cmdisp/monolog-microsoft-teams/pull/2) is accepted. In the meantime, the *monolog-microsoft-teams* package must be installed from our [**fork**](https://github.com/GermaniaKG/monolog-microsoft-teams). 
+
+Here's how to install via your project's **composer.json:**
+
+```json
+{
+    "require": {
+        "cmdisp/monolog-microsoft-teams": "dev-master"
+    },
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/GermaniaKG/monolog-microsoft-teams"
+        }
+    ]  
+}
+```
+
+---
+
+
+
 While their original *TeamsLogHandler* class just uses the `$record['message']`, this package's *HtmlFormattedTeamsLogHandler* class extension uses the `$record['formatted']` string.
 
 ```php
