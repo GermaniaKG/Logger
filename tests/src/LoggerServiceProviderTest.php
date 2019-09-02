@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {	
 
+
 	/**
 	 * @dataProvider provideCtorArgs
 	 */
@@ -32,45 +33,61 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function testMonologHandlers( )
+	public function createSut()
+	{
+		return new LoggerServiceProvider("logname", array(), true);
+	}
+
+
+
+	/**
+	 * @dataProvider provideServicesAndInternalTypes
+	 */
+	public function testServiceFileTypes( $service, $internal_type)
 	{
 
-		$sut = new LoggerServiceProvider("logname", array(), true);
+		$sut = $this->createSut();
 
 		$container = new Container;
 		$container->register( $sut );
 
-		$result = $container['Monolog.Handlers'];
-		$this->assertInternalType("array", $result);
+		$result = $container[ $service ];
+		$this->assertInternalType( $internal_type, $result);
+	}
+
+	public function provideServicesAndInternalTypes()
+	{
+		return array(
+			[ 'Monolog.Handlers', 'array' ],
+			[ 'Monolog.Processors', 'array' ]
+		);
 	}
 
 
-	public function testMonologProcessors( )
+
+	/**
+	 * @dataProvider provideServicesAndInterfaces
+	 */
+	public function testServiceInterfaces( $service, $expected_interface)
 	{
 
-		$sut = new LoggerServiceProvider("logname", array(), true);
+		$sut = $this->createSut();
 
 		$container = new Container;
 		$container->register( $sut );
 
-		$result = $container['Monolog.Processors'];
-		$this->assertInternalType("array", $result);
+		$result = $container[ $service ];
+		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-
-	public function testLoggerInterface( )
+	public function provideServicesAndInterfaces()
 	{
-
-		$sut = new LoggerServiceProvider("logname", array(), true);
-
-		$container = new Container;
-		$container->register( $sut );
-
-		$result = $container['Logger'];
-		$this->assertInstanceOf(LoggerInterface::class, $result);
-
-		$result = $container['Monolog.Psr3Logger'];
-		$this->assertInstanceOf(LoggerInterface::class, $result);
+		return array(
+			[ 'Logger',             LoggerInterface::class ],
+			[ 'Monolog.Psr3Logger', LoggerInterface::class ]
+		);
 	}
+
+
 
 }

@@ -5,6 +5,7 @@ use Germania\Logger\SlackLoggerServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
+use Monolog\Handler\SlackHandler;
 
 class SlackLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {	
@@ -16,15 +17,54 @@ class SlackLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function testMonologHandlers( )
+	public function createSut()
 	{
-		$container = new Container;
-
-		$sut = new SlackLoggerServiceProvider("token", "channel", "username", 0);
-		$container->register( $sut );
-
-		$result = $container['Monolog.Handlers'];
-		$this->assertInternalType("array", $result);
+		return new SlackLoggerServiceProvider("token", "channel", "username", 0);
 	}
 
+
+
+	/**
+	 * @dataProvider provideServicesAndInternalTypes
+	 */
+	public function testServiceFileTypes( $service, $internal_type)
+	{
+		$sut = $this->createSut();
+
+		$container = new Container;
+		$container->register( $sut );
+
+		$result = $container[ $service ];
+		$this->assertInternalType( $internal_type, $result);
+	}
+
+	public function provideServicesAndInternalTypes()
+	{
+		return array(
+			[ 'Monolog.Handlers', 'array' ]
+		);
+	}
+
+
+
+	/**
+	 * @dataProvider provideServicesAndInterfaces
+	 */
+	public function testServiceInterfaces( $service, $expected_interface)
+	{
+		$sut = $this->createSut();
+
+		$container = new Container;
+		$container->register( $sut );
+
+		$result = $container[ $service ];
+		$this->assertInstanceOf( $expected_interface, $result);
+	}
+
+	public function provideServicesAndInterfaces()
+	{
+		return array(
+			[ 'Monolog.Handlers.SlackHandler', SlackHandler::class ]
+		);
+	}	
 }

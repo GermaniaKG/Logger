@@ -4,7 +4,7 @@ namespace tests;
 use Germania\Logger\SwiftMailerLoggerServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Monolog\Handler\AbstractHandler;
+use Monolog\Handler\FingersCrossedHandler;
 use Germania\Mailer\MailerServiceProvider;
 
 class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
@@ -16,6 +16,15 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
+
+
+	public function createSut()
+	{
+		$loglevel  = 100;
+		return new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
+	}
+
+
 
 
 	public function testMonologHandlers( )
@@ -41,6 +50,8 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$result = $container['Monolog.Handlers'];
 		$this->assertInternalType("array", $result);
 	}
+
+
 
 
 	public function testExceptionOnMissingSwiftMailer( )

@@ -1,7 +1,7 @@
 # Germania KG · Logger
 
 **Default logging solution for Germania KG's websites:**
-**Pimple Service Provider for Logging with Monolog.**
+**Pimple Service Provider for Logging with Monolog 1 and 2.**
 
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/logger.svg?style=flat)](https://packagist.org/packages/germania-kg/logger)
@@ -15,8 +15,14 @@
 
 ## Installation with Composer
 
+The major release 4 requires PHP 7.2 and supports Monolog 2.
+
 ```bash
-$ composer require germania-kg/logger
+# Older PHP
+$ composer require germania-kg/logger:^3.0
+
+# PHP 7.2+
+$ composer require germania-kg/logger:^4.0
 ```
 ## Setup
 

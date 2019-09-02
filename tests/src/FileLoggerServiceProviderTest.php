@@ -5,6 +5,7 @@ use Germania\Logger\FileLoggerServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
+use Monolog\Handler\RotatingFileHandler;
 
 class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {	
@@ -18,18 +19,59 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function testMonologHandlers( )
+	public function createSut()
 	{
-
 		$loglevel  = 0;
 		$max_files = 0;
-		$sut = new FileLoggerServiceProvider("file", $max_files = 0, $loglevel );
+		return new FileLoggerServiceProvider("file", $max_files = 0, $loglevel );
+
+	}
+
+
+
+	/**
+	 * @dataProvider provideServicesAndInternalTypes
+	 */
+	public function testServiceFileTypes( $service, $internal_type)
+	{
+		$sut = $this->createSut();
 
 		$container = new Container;
 		$container->register( $sut );
 
-		$result = $container['Monolog.Handlers'];
-		$this->assertInternalType("array", $result);
+		$result = $container[ $service ];
+		$this->assertInternalType( $internal_type, $result);
 	}
 
+	public function provideServicesAndInternalTypes()
+	{
+		return array(
+			[ 'Monolog.Handlers', 'array' ]
+		);
+	}
+
+
+
+
+
+	/**
+	 * @dataProvider provideServicesAndInterfaces
+	 */
+	public function testServiceInterfaces( $service, $expected_interface)
+	{
+		$sut = $this->createSut();
+
+		$container = new Container;
+		$container->register( $sut );
+
+		$result = $container[ $service ];
+		$this->assertInstanceOf( $expected_interface, $result);
+	}
+
+	public function provideServicesAndInterfaces()
+	{
+		return array(
+			[ 'Monolog.Handlers.RotatingFileHandler', RotatingFileHandler::class ]
+		);
+	}	
 }
