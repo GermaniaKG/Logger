@@ -114,6 +114,12 @@ $dic->register(
 
 This requires **[CLImate](http://climate.thephpleague.com/)**, available with Composer: **[league/climate](https://github.com/thephpleague/climate)**
 
+```bash
+$ composer require league/climate
+```
+
+**Usage:**
+
 ```php
 <?php
 use Germania\Logger\ClimateLoggerServiceProvider;
@@ -128,39 +134,13 @@ $dic->register(
 
 ### Log to Microsoft Teams
 
-This requires CM DISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
+This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
-
-
----
-
-**IMPORTANT NOTICE: **
-**CM DISP's *monolog-microsoft-teams* package does not yet support Monolog 2.** 
-
-The support may be baked in one day when my [**pull request**](https://github.com/cmdisp/monolog-microsoft-teams/pull/2) is accepted. In the meantime, the *monolog-microsoft-teams* package must be installed from our [**fork**](https://github.com/GermaniaKG/monolog-microsoft-teams). 
-
-Here's how to install via your project's **composer.json:**
-
-```json
-{
-    "require": {
-        "cmdisp/monolog-microsoft-teams": "dev-master"
-    },
-
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/GermaniaKG/monolog-microsoft-teams"
-        }
-    ]  
-}
+```bash
+composer require cmdisp/monolog-microsoft-teams "^1.1"
 ```
 
----
-
-
-
-While their original *TeamsLogHandler* class just uses the `$record['message']`, this package's *HtmlFormattedTeamsLogHandler* class extension uses the `$record['formatted']` string.
+**Usage:**
 
 ```php
 <?php
@@ -173,10 +153,13 @@ $dic->register( new TeamsLoggerServiceProvider(
   $incoming_webhook_url,
   Logger::NOTICE
 ));
-  
 ```
 
 
+
+#### Deprecated: HtmlFormattedTeamsLogHandler
+
+The `Germania\Logger\HtmlFormattedTeamsLogHandler` was an extension of the `CMDISP\MonologMicrosoftTeams\TeamsLogHandler` class and provided better log message formatting. As of the v1.1 release of CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, this extension is not needed any longer and will be removed. 
 
 
 
