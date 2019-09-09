@@ -29,7 +29,7 @@
             "pimple/pimple": "^3.0.0",
             "monolog/monolog": "^1.16|^2.0",
             "bramus/monolog-colored-line-formatter": "^2.0|^3.0",
-            "cmdisp/monolog-microsoft-teams": "dev-master"        
+            "cmdisp/monolog-microsoft-teams": "^1.1"        
     },
 
     "require-dev": {
@@ -51,13 +51,7 @@
         "cmdisp/monolog-microsoft-teams": "Monolog Handler for sending messages to Microsoft Teams channels",
         "germania-kg/mailer": "Pimple Service Provider for email and SwiftMailer services. Required by 'SwiftMailerLoggerServiceProvider'.",
         "league/climate": "PHP's best friend for the terminal. Required by 'ClimateLoggerServiceProvider'"
-    },
+    }
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/GermaniaKG/monolog-microsoft-teams"
-        }
-    ]    
 
 }

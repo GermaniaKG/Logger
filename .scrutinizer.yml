@@ -15,13 +15,6 @@ build:
                     format: 'php-clover'
 
     nodes:
-        php70:
-            environment:
-                php: 7.0
-
-        php71:
-            environment:
-                php: 7.1
 
         php72:
             environment:
