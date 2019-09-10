@@ -6,9 +6,8 @@
 
 # Germania KG · Logger
 
-**Default logging solution for Germania KG's websites:**
+**Default logging solution for our websites:**
 **Pimple Service Provider for Logging with Monolog 1 and 2.**
-
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/logger.svg?style=flat)](https://packagist.org/packages/germania-kg/logger)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/logger.svg)](https://packagist.org/packages/germania-kg/logger)
