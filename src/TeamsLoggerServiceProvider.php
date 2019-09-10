@@ -25,7 +25,7 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
      * @param string   $incoming_webook_url [description]
      * @param int|null $loglevel            [description]
      */
-    public function __construct( string $incoming_webook_url, int $loglevel = null )
+    public function __construct(string $incoming_webook_url, int $loglevel = null)
     {
         $this->incoming_webook_url = $incoming_webook_url;
 
@@ -44,15 +44,17 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
 
 
         // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists( 'Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        if (!$dic->offsetExists('Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function ($dic) {
+                return array();
+            };
         endif;
 
 
         /**
          * @return array
          */
-        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
             $handlers[] = $dic['Monolog.Handlers.TeamsHandler'];
             return $handlers;
         });
@@ -64,12 +66,10 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return SlackHandler
          */
-        $dic['Monolog.Handlers.TeamsHandler'] = function( $dic) {
-            $th = new HtmlFormattedTeamsLogHandler( $this->incoming_webook_url, $this->loglevel);
-            $th->setFormatter( new HtmlFormatter );
+        $dic['Monolog.Handlers.TeamsHandler'] = function ($dic) {
+            $th = new HtmlFormattedTeamsLogHandler($this->incoming_webook_url, $this->loglevel);
+            $th->setFormatter(new HtmlFormatter);
             return $th;
         };
-
-
     }
 }

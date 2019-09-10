@@ -37,7 +37,7 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
      * @param string   $username [description]
      * @param int|null $loglevel [description]
      */
-    public function __construct( string $token, string $channel, string $username, int $loglevel = null )
+    public function __construct(string $token, string $channel, string $username, int $loglevel = null)
     {
         $this->token    = $token;
         $this->channel  = $channel;
@@ -58,15 +58,17 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
 
 
         // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists( 'Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        if (!$dic->offsetExists('Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function ($dic) {
+                return array();
+            };
         endif;
 
 
         /**
          * @return array
          */
-        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
             $handlers[] = $dic['Monolog.Handlers.SlackHandler'];
             return $handlers;
         });
@@ -81,7 +83,7 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return SlackHandler
          */
-        $dic['Monolog.Handlers.SlackHandler'] = function( $dic) {
+        $dic['Monolog.Handlers.SlackHandler'] = function ($dic) {
 
             // As hardcoded in SlackHandler class
             $useAttachment          = true;              // Whether the message should be added to Slack as attachment (plain text otherwise)
@@ -104,7 +106,5 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
 
             return new SlackHandler($token, $channel, $username, $useAttachment, $iconEmoji, $loglevel, $bubble, $useShortAttachment, $includeContextAndExtra, $excludeFields);
         };
-
-
     }
 }

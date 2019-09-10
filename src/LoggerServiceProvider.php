@@ -27,7 +27,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * @param array   $server_data  [description]
      * @param boolean $anonymize_ip [description]
      */
-    public function __construct( string $logger_name, array $server_data = null, $anonymize_ip = true )
+    public function __construct(string $logger_name, array $server_data = null, $anonymize_ip = true)
     {
         $this->logger_name  = $logger_name;
         $this->server_data  = $server_data ?: $_SERVER;
@@ -47,7 +47,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return \Monolog\Logger
          */
-        $dic['Logger'] = function($dic) {
+        $dic['Logger'] = function ($dic) {
             return $dic['Monolog.Psr3Logger'];
         };
 
@@ -55,7 +55,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return string
          */
-        $dic['Logger.name'] = function($dic) {
+        $dic['Logger.name'] = function ($dic) {
             return $this->logger_name;
         };
 
@@ -63,7 +63,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return array
          */
-        $dic['Logger.Environment'] = function($dic) {
+        $dic['Logger.Environment'] = function ($dic) {
             return $this->server_data;
         };
 
@@ -71,19 +71,19 @@ class LoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return MonologLogger
          */
-        $dic['Monolog.Psr3Logger'] = function( $dic ) {
+        $dic['Monolog.Psr3Logger'] = function ($dic) {
             $handlers   = $dic['Monolog.Handlers'];
             $processors = $dic['Monolog.Processors'];
             $title      = $dic['Logger.name'];
 
-            return new MonologLogger( $title, $handlers, $processors);
+            return new MonologLogger($title, $handlers, $processors);
         };
 
 
         /**
          * @return array
          */
-        $dic['Monolog.Handlers'] = function( $dic ) {
+        $dic['Monolog.Handlers'] = function ($dic) {
             return array();
         };
 
@@ -92,7 +92,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return array
          */
-        $dic['Monolog.Processors'] = function($dic) {
+        $dic['Monolog.Processors'] = function ($dic) {
             return array(
                 $dic['Monolog.Processors.PsrLogMessages'],
                 $dic['Monolog.Processors.WebProcessor']
@@ -104,18 +104,18 @@ class LoggerServiceProvider implements ServiceProviderInterface
          * @see https://github.com/Seldaek/monolog/blob/master/src/Monolog/Processor/PsrLogMessageProcessor.php
          * @return PsrLogMessageProcessor
          */
-        $dic['Monolog.Processors.PsrLogMessages'] = function($dic) {
-            return new PsrLogMessageProcessor( null, true);
+        $dic['Monolog.Processors.PsrLogMessages'] = function ($dic) {
+            return new PsrLogMessageProcessor(null, true);
         };
 
 
         /**
          * @return WebProcessor
          */
-        $dic['Monolog.Processors.WebProcessor'] = function($dic) {
+        $dic['Monolog.Processors.WebProcessor'] = function ($dic) {
             $server_data  = $dic['Logger.Environment'];
             $extra_fields = $dic['Monolog.Processors.WebProcessor.extraFields'];
-            return new WebProcessor( $server_data, $extra_fields );
+            return new WebProcessor($server_data, $extra_fields);
         };
 
 
@@ -124,15 +124,12 @@ class LoggerServiceProvider implements ServiceProviderInterface
          *
          * @return array
          */
-        $dic['Monolog.Processors.WebProcessor.extraFields'] = function($dic) {
+        $dic['Monolog.Processors.WebProcessor.extraFields'] = function ($dic) {
             return [
                 'http_method',
                 'url',
                 'ip'
             ];
         };
-
-
     }
-
 }

@@ -26,12 +26,12 @@ class ClimateLoggerServiceProvider implements ServiceProviderInterface
     /**
      * @param int
      */
-    public function __construct( int $loglevel )
+    public function __construct(int $loglevel)
     {
         $this->loglevel = $loglevel;
 
-        $monolog_loglevel_name = MonologLogger::getLevelName( $loglevel );
-        $this->loglevel_name = strtolower( $monolog_loglevel_name );
+        $monolog_loglevel_name = MonologLogger::getLevelName($loglevel);
+        $this->loglevel_name = strtolower($monolog_loglevel_name);
     }
 
 
@@ -44,32 +44,31 @@ class ClimateLoggerServiceProvider implements ServiceProviderInterface
 
 
         // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists( 'Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        if (!$dic->offsetExists('Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function ($dic) {
+                return array();
+            };
         endif;
 
 
         /**
          * @return array
          */
-        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
             $handlers[] = $dic['Climate.PsrLogger.MonologHandler'];
             return $handlers;
         });
 
 
-        $dic['Climate.PsrLogger.MonologHandler'] = function($dic) {
+        $dic['Climate.PsrLogger.MonologHandler'] = function ($dic) {
             $climate_logger = $dic['Climate.PsrLogger'];
-            return new PsrHandler( $climate_logger );
+            return new PsrHandler($climate_logger);
         };
 
 
-        $dic['Climate.PsrLogger'] = function($dic) {
+        $dic['Climate.PsrLogger'] = function ($dic) {
             $loglevel = $this->loglevel_name;
-            return new CLImateLogger( $loglevel );
+            return new CLImateLogger($loglevel);
         };
-
-
-
     }
 }

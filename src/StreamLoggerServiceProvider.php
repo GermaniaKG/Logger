@@ -27,7 +27,7 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
      * @param string|null $stream   [description]
      * @param int|null    $loglevel [description]
      */
-    public function __construct( string $stream = null, int $loglevel = null )
+    public function __construct(string $stream = null, int $loglevel = null)
     {
         if (!is_null($stream)) {
             $this->stream = $stream;
@@ -49,15 +49,17 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
 
 
         // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists( 'Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        if (!$dic->offsetExists('Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function ($dic) {
+                return array();
+            };
         endif;
 
         
         /**
          * @return array
          */
-        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
             $handlers[] = $dic['Monolog.Handlers.StreamHandler'];
             return $handlers;
         });
@@ -66,14 +68,14 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return StreamHandler
          */
-        $dic['Monolog.Handlers.StreamHandler'] = function( $dic) {
+        $dic['Monolog.Handlers.StreamHandler'] = function ($dic) {
             $stream     = $this->stream;
             $loglevel   = $this->loglevel;
 
             $stream_handler = new StreamHandler($stream, $loglevel);
 
             $formatter = $dic['Monolog.Formatters.ColoredLineFormatter'];
-            $stream_handler->setFormatter( $formatter );
+            $stream_handler->setFormatter($formatter);
 
             return $stream_handler;
         };
@@ -82,7 +84,7 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
         /**
          * Taken from Monolog
          */
-        $dic['Monolog.Handlers.StreamHandler.FormatLine'] = function( $dic ) {
+        $dic['Monolog.Handlers.StreamHandler.FormatLine'] = function ($dic) {
             $format = "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
             return $format;
         };
@@ -92,11 +94,9 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
          * @see  https://github.com/bramus/monolog-colored-line-formatter/blob/master/src/Formatter/ColoredLineFormatter.php
          * @return  ColoredLineFormatter from Bramus
          */
-        $dic['Monolog.Formatters.ColoredLineFormatter'] = function( $dic )
-        {
+        $dic['Monolog.Formatters.ColoredLineFormatter'] = function ($dic) {
             $format = $dic['Monolog.Handlers.StreamHandler.FormatLine'];
-            return new ColoredLineFormatter( null, $format, null, false, "ignore_empty" );
+            return new ColoredLineFormatter(null, $format, null, false, "ignore_empty");
         };
-
     }
 }
