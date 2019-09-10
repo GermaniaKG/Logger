@@ -31,7 +31,7 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
      * @param int|null    $max_files [description]
      * @param int|null    $loglevel  [description]
      */
-    public function __construct( string $logfile = null, int $max_files = null, int $loglevel = null )
+    public function __construct(string $logfile = null, int $max_files = null, int $loglevel = null)
     {
         $this->logfile = $logfile;
 
@@ -55,15 +55,17 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
 
 
         // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists( 'Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        if (!$dic->offsetExists('Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function ($dic) {
+                return array();
+            };
         endif;
 
         
         /**
          * @return array
          */
-        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
             $handlers[] = $dic['Monolog.Handlers.RotatingFileHandler'];
             return $handlers;
         });
@@ -72,15 +74,12 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
         /**
          * @return RotatingFileHandler
          */
-        $dic['Monolog.Handlers.RotatingFileHandler'] = function( $dic) {
-
+        $dic['Monolog.Handlers.RotatingFileHandler'] = function ($dic) {
             $logfile   = $this->logfile;
             $max_files = $this->max_files;
             $loglevel  = $this->loglevel;
 
             return new RotatingFileHandler($logfile, $max_files, $loglevel);
         };
-
-
     }
 }

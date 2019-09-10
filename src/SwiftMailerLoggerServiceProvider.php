@@ -10,7 +10,6 @@ use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\SwiftMailerHandler;
 
-
 class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
 {
 
@@ -32,7 +31,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
      * @param int|null $outer_loglevel Loglevel for FingersCrossedHandler. Default: Logger::WARNING
      * @param int|null $inner_loglevel Loglevel for SwiftMailerHandler. Default: Logger::DEBUG
      */
-    public function __construct( int $outer_loglevel = Logger::WARNING,  int $inner_loglevel = Logger::DEBUG )
+    public function __construct(int $outer_loglevel = Logger::WARNING, int $inner_loglevel = Logger::DEBUG)
     {
         $this->outer_loglevel = $outer_loglevel;
         $this->inner_loglevel = $inner_loglevel;
@@ -45,25 +44,26 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $dic)
     {
-
-        if (!$dic->offsetExists( "SwiftMailer")) :
+        if (!$dic->offsetExists("SwiftMailer")) :
             throw new \RuntimeException("This service provider requires a 'SwiftMailer' service.");
         endif;
 
-        if (!$dic->offsetExists( "SwiftMailer.HtmlMessage")) :
+        if (!$dic->offsetExists("SwiftMailer.HtmlMessage")) :
             throw new \RuntimeException("This service provider requires a 'SwiftMailer.HtmlMessage' service.");
         endif;
 
 
         // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists( 'Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function($dic) { return array(); };
+        if (!$dic->offsetExists('Monolog.Handlers')) :
+            $dic['Monolog.Handlers'] = function ($dic) {
+                return array();
+            };
         endif;
 
         /**
          * @return array
          */
-        $dic->extend('Monolog.Handlers', function(array $handlers, $dic) {
+        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
             $handlers[] = $dic['Monolog.Handlers.SwiftMailerHandler'];
             return $handlers;
         });
@@ -84,7 +84,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return FingersCrossedHandler
          */
-        $dic['Monolog.Handlers.SwiftMailerHandler'] = function( $dic) {
+        $dic['Monolog.Handlers.SwiftMailerHandler'] = function ($dic) {
             $mailer   = $dic['SwiftMailer'];
 
             // The mail subject will be used for LineFormatter
@@ -93,13 +93,11 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
             $message->setSubject("[%channel%.%level_name%] %message%\n");
 
             // Set loglevel for this handler to $inner_loglevel (usually DEBUG) to gather ALL information
-            $mailerHandler = new SwiftMailerHandler( $mailer, $message, $this->inner_loglevel);
-            $mailerHandler->setFormatter( new HtmlFormatter );
+            $mailerHandler = new SwiftMailerHandler($mailer, $message, $this->inner_loglevel);
+            $mailerHandler->setFormatter(new HtmlFormatter);
 
             // Build handler "sandwich"
-            return new FingersCrossedHandler( new BufferHandler( $mailerHandler ), $this->outer_loglevel);
+            return new FingersCrossedHandler(new BufferHandler($mailerHandler), $this->outer_loglevel);
         };
-
-
     }
 }

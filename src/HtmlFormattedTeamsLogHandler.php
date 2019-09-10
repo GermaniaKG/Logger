@@ -9,5 +9,4 @@ use CMDISP\MonologMicrosoftTeams\TeamsLogHandler;
 
 class HtmlFormattedTeamsLogHandler extends TeamsLogHandler
 {
-
 }
