@@ -54,6 +54,7 @@ var/*
 logs/*
 config.json
 .htaccess
+.php_cs*
 tests/build
 build
 phpunit.xml
