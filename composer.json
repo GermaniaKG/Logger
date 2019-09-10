@@ -36,15 +36,19 @@
         "php-coveralls/php-coveralls": "^2.0",
         "phpunit/phpunit": "^5.7|^6.0|^7.0",
         "league/climate": "^3.4",
-        "germania-kg/mailer": "^1.0"
+        "germania-kg/mailer": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.15"
     },
 
     "scripts": {
-          "phpunit": "phpunit",
+        "phpcs":       "php-cs-fixer fix --verbose --diff --dry-run src/",
+        "phpcs-apply": "php-cs-fixer fix --verbose --diff src/",
 
-          "test": [
-              "@phpunit"
-          ]
+        "phpunit": "phpunit",
+
+        "test": [
+            "@phpunit"
+        ]
     },
 
     "suggest": {
