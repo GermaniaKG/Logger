@@ -1,8 +1,13 @@
+<img src="https://static.germania-kg.com/logos/ga-logo-2016-web.svgz" width="250px">
+
+------
+
+
+
 # Germania KG · Logger
 
-**Default logging solution for Germania KG's websites:**
+**Default logging solution for our websites:**
 **Pimple Service Provider for Logging with Monolog 1 and 2.**
-
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/logger.svg?style=flat)](https://packagist.org/packages/germania-kg/logger)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/logger.svg)](https://packagist.org/packages/germania-kg/logger)
@@ -15,7 +20,8 @@
 
 ## Installation with Composer
 
-The major release 4 requires PHP 7.2 and the older release 3 supports Monolog 2.
+The major release 4 requires PHP 7.2.
+The older release 3 supports Monolog 2.
 
 ```bash
 $ composer require germania-kg/logger
@@ -42,24 +48,29 @@ $dic->register( new LoggerServiceProvider(
 
 ### Services provided
 
+This *Monolog* Logger instance is your PSR-3 Logger:
+
 ```php
-// This Monolog Logger instance is your PSR-3 Logger
-$dic['Logger']
-  
-// Monolog handlers array; 
-// Empty per default; will be filled by one or more 
-// of the specialised Service Providers below.
-$dic['Monolog.Handlers']
-  
-// Monolog Processors array;
-// Default: just Monolog's "WebProcessor" with "ip", "method" and "url"
-$dic['Monolog.Processors']
- 
+$logger = $dic['Logger'];
+```
+
+This Monolog handlers array is empty per default; it will be filled by one or more  of the specialised *Service Providers* below.
+
+```php
+$handlers = $dic['Monolog.Handlers'];
+```
+
+This Monolog Processors array contains per default just Monolog's *WebProcessor* with `ip`, `method` and `url` extra context variables.
+
+```php
+$processors = $dic['Monolog.Processors'];
 ```
 
 
 
 ## Specialised Service Providers
+
+
 
 ### Log to logfile
 
@@ -98,6 +109,10 @@ $dic->register( new StreamLoggerServiceProvider("php://stderr", Logger::WARNING)
 
 This service requires service definitions for **SwiftMailer** and **SwiftMailer.HtmlMessage**. Germania KG's **[germania-kg/mailer](https://github.com/germaniaKG/Mailer)** will provide those.
 
+```bash
+$ composer require germania-kg/mailer
+```
+
 ```php
 <?php
 use Germania\Logger\SwiftMailerLoggerServiceProvider;
@@ -118,8 +133,6 @@ This requires **[CLImate](http://climate.thephpleague.com/)**, available with Co
 $ composer require league/climate
 ```
 
-**Usage:**
-
 ```php
 <?php
 use Germania\Logger\ClimateLoggerServiceProvider;
@@ -139,8 +152,6 @@ This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/mon
 ```bash
 composer require cmdisp/monolog-microsoft-teams "^1.1"
 ```
-
-**Usage:**
 
 ```php
 <?php
@@ -186,7 +197,9 @@ $dic->register( new SlackLoggerServiceProvider(
 
 ```
 
-## Example
+
+
+## Usage Example
 
 ```php
 <?php
@@ -229,15 +242,13 @@ $logger->info("Hooray!");
 
 
 
-## Development
+## Development and Unit tests
 
 ```bash
 $ git clone https://github.com/GermaniaKG/Logger.git
 $ cd Logger
 $ composer install
 ```
-
-## Unit tests
 
 Either copy `phpunit.xml.dist` to `phpunit.xml` and adapt to your needs, or leave as is. Run [PhpUnit](https://phpunit.de/) test or composer scripts like this:
 
