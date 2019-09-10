@@ -28,8 +28,7 @@
             "php": "^7.2",
             "pimple/pimple": "^3.0.0",
             "monolog/monolog": "^1.16|^2.0",
-            "bramus/monolog-colored-line-formatter": "^2.0|^3.0",
-            "cmdisp/monolog-microsoft-teams": "^1.1"        
+            "bramus/monolog-colored-line-formatter": "^2.0|^3.0"
     },
 
     "require-dev": {
@@ -37,7 +36,8 @@
         "phpunit/phpunit": "^5.7|^6.0|^7.0",
         "league/climate": "^3.4",
         "germania-kg/mailer": "^1.0",
-        "friendsofphp/php-cs-fixer": "^2.15"
+        "friendsofphp/php-cs-fixer": "^2.15",
+        "cmdisp/monolog-microsoft-teams": "^1.1"
     },
 
     "scripts": {

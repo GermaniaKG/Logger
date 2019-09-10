@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7ae3f9b36d8705dee91b84b3ef49c5f",
+    "content-hash": "0292074c0e4d67c8d6e456e87291ceda",
     "packages": [
         {
             "name": "bramus/ansi-php",
@@ -87,42 +87,6 @@
             ],
             "description": "Colored Line Formatter for Monolog",
             "time": "2019-02-12T13:30:46+00:00"
-        },
-        {
-            "name": "cmdisp/monolog-microsoft-teams",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cmdisp/monolog-microsoft-teams.git",
-                "reference": "67faf29468d3091e7673edd4044f64af9aceedb9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cmdisp/monolog-microsoft-teams/zipball/67faf29468d3091e7673edd4044f64af9aceedb9",
-                "reference": "67faf29468d3091e7673edd4044f64af9aceedb9",
-                "shasum": ""
-            },
-            "require": {
-                "monolog/monolog": "^1.23|^2.0",
-                "php": "^7.2"
-            },
-            "require-dev": {
-                "ext-curl": "*",
-                "php-coveralls/php-coveralls": "^2.0",
-                "phpunit/phpunit": "^5.7|^6.0|^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CMDISP\\MonologMicrosoftTeams\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Monolog Handler for sending messages to Microsoft Teams using the Incoming Webhook connector",
-            "time": "2019-09-06T07:21:59+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -353,6 +317,42 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "cmdisp/monolog-microsoft-teams",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cmdisp/monolog-microsoft-teams.git",
+                "reference": "67faf29468d3091e7673edd4044f64af9aceedb9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cmdisp/monolog-microsoft-teams/zipball/67faf29468d3091e7673edd4044f64af9aceedb9",
+                "reference": "67faf29468d3091e7673edd4044f64af9aceedb9",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "^1.23|^2.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^5.7|^6.0|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CMDISP\\MonologMicrosoftTeams\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Monolog Handler for sending messages to Microsoft Teams using the Incoming Webhook connector",
+            "time": "2019-09-06T07:21:59+00:00"
+        },
         {
             "name": "composer/semver",
             "version": "1.5.0",
