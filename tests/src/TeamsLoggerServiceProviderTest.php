@@ -6,9 +6,12 @@ use Germania\Logger\HtmlFormattedTeamsLogHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
-{	
+{
+
+    use ProphecyTrait;
 
 	public function testInstantiation()
 	{
@@ -27,7 +30,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $internal_type)
+	public function testServiceFileTypes( $service, $expected_type)
 	{
 
 		$sut = $this->createSut();
@@ -36,7 +39,27 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$container->register( $sut );
 
 		$result = $container[ $service ];
-		$this->assertInternalType( $internal_type, $result);
+        switch($expected_type):
+            case "bool":
+                $this->assertIsBool( $result );
+                break;
+            case "array":
+                $this->assertIsArray( $result );
+                break;
+            case "callable":
+                $this->assertIsCallable( $result );
+                break;
+
+            default:
+                if (class_exists($expected_type)
+                or interface_exists($expected_type)):
+                    $this->assertInstanceOf( $expected_type, $result);
+                    break;
+                endif;
+
+                $msg = sprintf("Expected type '%s' not supported in this test method", $expected_type);
+                throw new \UnexpectedValueException( $msg );
+        endswitch;
 	}
 
 	public function provideServicesAndInternalTypes()
@@ -70,5 +93,5 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		return array(
 			[ 'Monolog.Handlers.TeamsHandler', HtmlFormattedTeamsLogHandler::class ]
 		);
-	}	
+	}
 }

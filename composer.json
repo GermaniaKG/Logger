@@ -33,11 +33,12 @@
 
     "require-dev": {
         "php-coveralls/php-coveralls": "^2.0",
-        "phpunit/phpunit": "^5.7|^6.0|^7.0",
+        "phpunit/phpunit": "^8.0|^9.0",
         "league/climate": "^3.4",
         "germania-kg/mailer": "^1.0",
         "friendsofphp/php-cs-fixer": "^2.15",
-        "cmdisp/monolog-microsoft-teams": "^1.1"
+        "cmdisp/monolog-microsoft-teams": "^1.1",
+        "phpspec/prophecy-phpunit": "^2.0"
     },
 
     "scripts": {
