@@ -6,9 +6,12 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\FingersCrossedHandler;
 use Germania\Mailer\MailerServiceProvider;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
-{	
+{
+
+    use ProphecyTrait;
 
 	public function testInstantiation()
 	{
@@ -48,7 +51,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$container->register( $sut );
 
 		$result = $container['Monolog.Handlers'];
-		$this->assertInternalType("array", $result);
+		$this->assertIsArray($result);
 	}
 
 
