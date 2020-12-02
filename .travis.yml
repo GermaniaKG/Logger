@@ -4,7 +4,6 @@
 language: php
 
 php:
-  - "7.2"
   - "7.3"
   - "7.4"
 
@@ -13,7 +12,7 @@ env:
 before_script:
   - rm composer.lock
   - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+  - composer install --prefer-source --no-interaction
   - cp phpunit.xml.dist phpunit.xml
 
 script:

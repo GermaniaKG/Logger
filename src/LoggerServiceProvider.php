@@ -4,6 +4,7 @@ namespace Germania\Logger;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
+use Psr\Log\LoggerInterface;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\WebProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
@@ -44,12 +45,23 @@ class LoggerServiceProvider implements ServiceProviderInterface
     public function register(Container $dic)
     {
 
+
+        /**
+         * @return \Monolog\Logger
+         */
+        $dic[LoggerInterface::class] = function ($dic) {
+            return $dic['Monolog.Psr3Logger'];
+        };
+
+
+
         /**
          * @return \Monolog\Logger
          */
         $dic['Logger'] = function ($dic) {
             return $dic['Monolog.Psr3Logger'];
         };
+
 
 
         /**
