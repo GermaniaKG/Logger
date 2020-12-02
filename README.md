@@ -54,6 +54,14 @@ This *Monolog* Logger instance is your PSR-3 Logger:
 $logger = $dic['Logger'];
 ```
 
+Alternatively:
+
+```php
+<?php
+use Psr\Log\LoggerInterface;
+$logger = $dic[LoggerInterface::class];
+```
+
 This Monolog handlers array is empty per default; it will be filled by one or more  of the specialised *Service Providers* below.
 
 ```php

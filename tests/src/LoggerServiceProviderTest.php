@@ -105,7 +105,8 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	{
 		return array(
 			[ 'Logger',             LoggerInterface::class ],
-			[ 'Monolog.Psr3Logger', LoggerInterface::class ]
+			[ 'Monolog.Psr3Logger', LoggerInterface::class ],
+            [ LoggerInterface::class, LoggerInterface::class ]
 		);
 	}
 
