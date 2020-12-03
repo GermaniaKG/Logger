@@ -153,6 +153,20 @@ $dic->register(
 
 
 
+### Log using BrowserConsole Logger
+
+```php
+<?php
+use Germania\Logger\BrowserConsoleLoggerServiceProvider;
+use Monolog\Logger;
+
+$dic->register( 
+  new BrowserConsoleLoggerServiceProvider( Logger::INFO ) 
+);
+```
+
+
+
 ### Log to Microsoft Teams
 
 This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
