@@ -22,16 +22,13 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string   $incoming_webook_url [description]
-     * @param int|null $loglevel            [description]
+     * @param string   $incoming_webook_url Incoming Webhook URL, leave empty to disable
+     * @param int|null $loglevel            Monolog loglevel number
      */
-    public function __construct(string $incoming_webook_url, int $loglevel = null)
+    public function __construct(string $incoming_webook_url = null, int $loglevel = null)
     {
         $this->incoming_webook_url = $incoming_webook_url;
-
-        if (!is_null($loglevel)) {
-            $this->loglevel = $loglevel;
-        }
+        $this->loglevel = $loglevel ?: Logger::INFO;
     }
 
 
@@ -41,6 +38,11 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $dic)
     {
+
+        // Do nothing when no incoming_webook_url is set
+        if (empty($this->incoming_webook_url)) {
+            return;
+        }
 
 
         // Make sure there's a 'Monolog.Handlers' service
