@@ -51,7 +51,10 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $dic)
     {
-
+        // Do nothing when no logfile is set
+        if (empty($this->logfile)) {
+            return;
+        }
 
 
         // Make sure there's a 'Monolog.Handlers' service
@@ -61,7 +64,7 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
             };
         endif;
 
-        
+
         /**
          * @return array
          */
