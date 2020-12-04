@@ -18,14 +18,11 @@ class BrowserConsoleLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string   $incoming_webook_url [description]
-     * @param int|null $loglevel            [description]
+     * @param int|null $loglevel Monolog Loglevel nulber or NULL to disable
      */
     public function __construct(int $loglevel = null)
     {
-        if (!is_null($loglevel)) {
-            $this->loglevel = $loglevel;
-        }
+        $this->loglevel = $loglevel;
     }
 
 
@@ -35,7 +32,10 @@ class BrowserConsoleLoggerServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $dic)
     {
-
+        // Do nothing when no loglevel is set
+        if (empty($this->loglevel)) {
+            return;
+        }
 
         // Make sure there's a 'Monolog.Handlers' service
         if (!$dic->offsetExists('Monolog.Handlers')) :
