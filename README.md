@@ -20,7 +20,7 @@
 
 ## Installation with Composer
 
-The major release 4 requires PHP 7.2.
+The major release 4 requires PHP 7.2+.
 The older release 3 supports Monolog 2.
 
 ```bash
