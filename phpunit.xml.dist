@@ -13,6 +13,8 @@
   <testsuites>
     <testsuite name="Test Suite">
       <directory>tests/src</directory>
+      <!-- Disclose this one until package cmdisp/monolog-microsoft-teams allows PHP 8 -->
+      <exclude>tests/src/TeamsLoggerServiceProviderTest.php</exclude>
     </testsuite>
   </testsuites>
   <logging>
