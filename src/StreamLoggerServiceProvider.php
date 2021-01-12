@@ -24,8 +24,8 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string|null $stream   [description]
-     * @param int|null    $loglevel [description]
+     * @param string|null $stream   PHP Stream name
+     * @param int|null    $loglevel Monolog Loglevel constant
      */
     public function __construct(string $stream = null, int $loglevel = null)
     {
@@ -55,7 +55,7 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
             };
         endif;
 
-        
+
         /**
          * @return array
          */
