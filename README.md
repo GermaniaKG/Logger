@@ -28,6 +28,8 @@ $ composer require germania-kg/logger
 ```
 ## Setup
 
+Class **LoggerServiceProvider** is a Pimple *ServiceProviderInterface* and can be registered to any Pimple DI container. Its constructor requires the *App or Logger* name. – Optionally, the `$_SERVER` context may pe passed. An optional third parameter turns on IP address anonymizing:
+
 
 ```php
 <?php
@@ -38,49 +40,48 @@ $dic = new \Pimple\Container;
 $dic->register( new LoggerServiceProvider( "My App" );
                
 // Alternatively, pass custom server data environment,
-// disable IP address anonymization               
-$dic->register( new LoggerServiceProvider(
-  "My App",
-  $_SERVER,
-  false
-));
+// and/or disable IP address anonymization               
+$dic->register( new LoggerServiceProvider( "My App", $_SERVER, false ));
 ```
 
 ### Services provided
 
-This *Monolog* Logger instance is your PSR-3 Logger:
-
-```php
-$logger = $dic['Logger'];
-```
-
-Alternatively:
+This ***Monolog Logger*** instance is your PSR-3 Logger:
 
 ```php
 <?php
 use Psr\Log\LoggerInterface;
+
+// These are equal and refer to the same instance:
 $logger = $dic[LoggerInterface::class];
+$logger = $dic['Monolog.Psr3Logger'];
+$logger = $dic['Logger'];
+
+echo get_class($logger);
+// Monolog\Logger
 ```
 
-This Monolog handlers array is empty per default; it will be filled by one or more  of the specialised *Service Providers* below.
+This ***Monolog Handlers*** array is empty per default; it will be filled by one or more  of the specialised *Service Providers* below.
 
 ```php
 $handlers = $dic['Monolog.Handlers'];
+print_r($handlers); // Array ...
 ```
 
-This Monolog Processors array contains per default just Monolog's *WebProcessor* with `ip`, `method` and `url` extra context variables.
+This ***Monolog Processors*** array contains per default just Monolog's *WebProcessor* with `ip`, `method` and `url` extra context variables.
 
 ```php
 $processors = $dic['Monolog.Processors'];
+print_r($processors); // Array ...
 ```
 
 
 
 ## Specialised Service Providers
 
+### Log to Logfile
 
-
-### Log to logfile
+Class **FileLoggerServiceProvider** requires a *logfile path*. Optionally, you may pass a custom maximum *number of logfiles* (default: 30), and a *Monolog Loglevel constant* which defaults to `Monolog\Logger::DEBUG`.
 
 ```php
 <?php
@@ -171,6 +172,8 @@ $dic->register(
 
 This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
+Class **TeamsLoggerServiceProvider** requires a *Webhook URL* string, and optionally a *Monolog Loglevel constant* such as `Monolog\Logger::INFO`. Registering this ServiceProvider to a Pimple DI container will silently skip if the Webhook URL is empty.
+
 ```bash
 composer require cmdisp/monolog-microsoft-teams "^1.1"
 ```
@@ -184,15 +187,13 @@ $incoming_webhook_url="https://outlook.office.com/webhook/many-many-letters";
 
 $dic->register( new TeamsLoggerServiceProvider(
   $incoming_webhook_url,
-  Logger::NOTICE
+  \Monolog\Logger::NOTICE
 ));
 ```
 
-
-
 #### Deprecated: HtmlFormattedTeamsLogHandler
 
-The `Germania\Logger\HtmlFormattedTeamsLogHandler` was an extension of the `CMDISP\MonologMicrosoftTeams\TeamsLogHandler` class and provided better log message formatting. As of the v1.1 release of CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, this extension is not needed any longer and will be removed. 
+The `Germania\Logger\HtmlFormattedTeamsLogHandler` was an extension of the `CMDISP\MonologMicrosoftTeams\TeamsLogHandler` class and provided better log message formatting. As of the v1.1 release of CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, this extension is not needed any longer and will be removed as of major release 5.
 
 
 
