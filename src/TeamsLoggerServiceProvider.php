@@ -6,6 +6,8 @@ use Pimple\ServiceProviderInterface;
 
 use Monolog\Logger;
 use Monolog\Formatter\HtmlFormatter;
+use CMDISP\MonologMicrosoftTeams\TeamsLogHandler;
+
 
 class TeamsLoggerServiceProvider implements ServiceProviderInterface
 {
@@ -69,7 +71,7 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
          * @return SlackHandler
          */
         $dic['Monolog.Handlers.TeamsHandler'] = function ($dic) {
-            $th = new HtmlFormattedTeamsLogHandler($this->incoming_webook_url, $this->loglevel);
+            $th = new TeamsLogHandler($this->incoming_webook_url, $this->loglevel);
             $th->setFormatter(new HtmlFormatter);
             return $th;
         };
