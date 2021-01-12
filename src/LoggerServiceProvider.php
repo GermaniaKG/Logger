@@ -24,9 +24,9 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string  $logger_name  [description]
-     * @param array   $server_data  [description]
-     * @param boolean $anonymize_ip [description]
+     * @param string   $logger_name   App or logger name
+     * @param array    $server_data   Server data, default is `$_SERVER`
+     * @param boolean  $anonymize_ip  Whether to anonymize client IPs
      */
     public function __construct(string $logger_name, array $server_data = null, $anonymize_ip = true)
     {

@@ -32,10 +32,10 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string   $token    [description]
-     * @param string   $channel  [description]
-     * @param string   $username [description]
-     * @param int|null $loglevel [description]
+     * @param string   $token    Slack token
+     * @param string   $channel  Slack channel
+     * @param string   $username Slack username
+     * @param int|null $loglevel Monolog Loglevel constant
      */
     public function __construct(string $token, string $channel, string $username, int $loglevel = null)
     {

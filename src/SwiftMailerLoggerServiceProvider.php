@@ -28,8 +28,8 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param int|null $outer_loglevel Loglevel for FingersCrossedHandler. Default: Logger::WARNING
-     * @param int|null $inner_loglevel Loglevel for SwiftMailerHandler. Default: Logger::DEBUG
+     * @param int|null $outer_loglevel Monolog Loglevel constant for FingersCrossedHandler. Default: `Logger::WARNING`
+     * @param int|null $inner_loglevel Monolog Loglevel constant for SwiftMailerHandler. Default: `Logger::DEBUG`
      */
     public function __construct(int $outer_loglevel = Logger::WARNING, int $inner_loglevel = Logger::DEBUG)
     {

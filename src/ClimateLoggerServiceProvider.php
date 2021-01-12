@@ -20,11 +20,11 @@ class ClimateLoggerServiceProvider implements ServiceProviderInterface
     /**
      * @var string
      */
-    public $loglevel_name = "debug";
+    public $loglevel_name;
 
 
     /**
-     * @param int
+     * @param int Monolog Loglevel constant
      */
     public function __construct(int $loglevel)
     {

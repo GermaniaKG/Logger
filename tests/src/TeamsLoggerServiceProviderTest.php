@@ -2,7 +2,7 @@
 namespace tests;
 
 use Germania\Logger\TeamsLoggerServiceProvider;
-use Germania\Logger\HtmlFormattedTeamsLogHandler;
+use CMDISP\MonologMicrosoftTeams\TeamsLogHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
@@ -91,7 +91,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function provideServicesAndInterfaces()
 	{
 		return array(
-			[ 'Monolog.Handlers.TeamsHandler', HtmlFormattedTeamsLogHandler::class ]
+            [ 'Monolog.Handlers.TeamsHandler', TeamsLogHandler::class ]
 		);
 	}
 }

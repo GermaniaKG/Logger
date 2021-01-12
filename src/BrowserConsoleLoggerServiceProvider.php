@@ -18,7 +18,7 @@ class BrowserConsoleLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param int|null $loglevel Monolog Loglevel nulber or NULL to disable
+     * @param int|null $loglevel Optional: Monolog Loglevel constant. Set to `null` to disable browser logging entirely.
      */
     public function __construct(int $loglevel = null)
     {
