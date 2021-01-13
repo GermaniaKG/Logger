@@ -62,7 +62,9 @@ echo get_class($logger);
 // Monolog\Logger
 ```
 
-This ***Monolog Handlers*** array is empty per default; it will be filled by one or more  of the specialised *Service Providers* below.
+This ***Monolog Handlers*** array is empty per default; it will be filled by one or more of the specialised *Service Providers* below. 
+
+Unless you want to add other handlers than those configured by the specialised Service providers you won't need to use these. 
 
 ```php
 $handlers = $dic['Monolog.Handlers'];
@@ -70,6 +72,8 @@ print_r($handlers); // Array ...
 ```
 
 This ***Monolog Processors*** array contains per default just Monolog's *WebProcessor* with `ip`, `method` and `url` extra context variables.
+
+Unless you want to add other processors than those configured by the specialised Service providers you won't need to use these. 
 
 ```php
 $processors = $dic['Monolog.Processors'];
