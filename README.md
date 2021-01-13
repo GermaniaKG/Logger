@@ -168,6 +168,8 @@ $dic->register( new BrowserConsoleLoggerServiceProvider( \Monolog\Logger::INFO )
 
 ### Log to Microsoft Teams
 
+**Sends nicely formatted log messages to *Microsoft Teams* using Monolog's [*HtmlFormatter*](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Formatter/HtmlFormatter.php).**
+
 This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
 ```bash
