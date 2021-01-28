@@ -6,19 +6,45 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\BrowserConsoleHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Prophecy\PhpUnit\ProphecyTrait;
+
 
 class BrowserConsoleLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     use ProphecyTrait;
 
-	public function testInstantiation() : BrowserConsoleLoggerServiceProvider
+
+
+    public function testInstantiation() : BrowserConsoleLoggerServiceProvider
 	{
 		$sut = new BrowserConsoleLoggerServiceProvider( 100 );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
         return $sut;
 	}
+
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+    public function testVariousLogLevels( $loglevel ) : BrowserConsoleLoggerServiceProvider
+    {
+        $sut = new BrowserConsoleLoggerServiceProvider( $loglevel );
+        $this->assertInstanceOf( ServiceProviderInterface::class, $sut);
+        return $sut;
+    }
+
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
+
 
 
 	/**

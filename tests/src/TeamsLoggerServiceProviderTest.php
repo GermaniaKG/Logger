@@ -6,6 +6,8 @@ use CMDISP\MonologMicrosoftTeams\TeamsLogHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
@@ -13,12 +15,25 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation() : void
+
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+	public function testInstantiation( $loglevel ) : void
 	{
-		$sut = new TeamsLoggerServiceProvider("webhook", 0);
+		$sut = new TeamsLoggerServiceProvider("webhook", $loglevel);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 
 	public function createSut() : TeamsLoggerServiceProvider

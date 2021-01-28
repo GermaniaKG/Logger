@@ -27,11 +27,11 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string|null $logfile   Logfile path
-     * @param int|null    $max_files Maximum number of logfiles
-     * @param int|null    $loglevel  Monolog Loglevel constant
+     * @param string|null      $logfile    Logfile path
+     * @param int|null         $max_files  Maximum number of logfiles
+     * @param int|null|string  $loglevel   Optional: Monolog  or PSR-3 Loglevel constant
      */
-    public function __construct(string $logfile = null, int $max_files = null, int $loglevel = null)
+    public function __construct(string $logfile = null, int $max_files = null, $loglevel = null)
     {
         $this->logfile = $logfile;
 

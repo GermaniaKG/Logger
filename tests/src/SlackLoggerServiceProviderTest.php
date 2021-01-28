@@ -6,17 +6,33 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\SlackHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 class SlackLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
     use ProphecyTrait;
 
-	public function testInstantiation() : void
+
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+    public function testInstantiation( $loglevel ) : void
 	{
-		$sut = new SlackLoggerServiceProvider("token", "channel", "username", 0);
+		$sut = new SlackLoggerServiceProvider("token", "channel", "username", $loglevel);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
+
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 0 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 
 	public function createSut() : SlackLoggerServiceProvider

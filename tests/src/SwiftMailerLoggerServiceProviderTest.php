@@ -5,6 +5,8 @@ use Germania\Logger\SwiftMailerLoggerServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\FingersCrossedHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Germania\Mailer\MailerServiceProvider;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -13,12 +15,24 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation() : void
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+	public function testInstantiation($loglevel) : void
 	{
-		$loglevel  = 100;
 		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
+
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 
 	public function createSut() : SwiftMailerLoggerServiceProvider

@@ -8,19 +8,32 @@ use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\PsrHandler;
 use League\CLImate\Logger as CLImateLogger;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Psr\Log\LogLevel;
+use Monolog\Logger;
 
 class ClimateLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     use ProphecyTrait;
 
-	public function testInstantiation() : void
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+    public function testInstantiation($loglevel ) : void
 	{
-		$loglevel  = 100;
 		$sut = new ClimateLoggerServiceProvider($loglevel );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 
 	public function createSut() : ClimateLoggerServiceProvider

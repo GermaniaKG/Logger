@@ -24,10 +24,10 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param string|null $stream   PHP Stream name
-     * @param int|null    $loglevel Monolog Loglevel constant
+     * @param string|null      $stream    PHP Stream name
+     * @param int|null|string  $loglevel  Optional: Monolog or PSR-3 Loglevel constant
      */
-    public function __construct(string $stream = null, int $loglevel = null)
+    public function __construct(string $stream = null, $loglevel = null)
     {
         if (!is_null($stream)) {
             $this->stream = $stream;

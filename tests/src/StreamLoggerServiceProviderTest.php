@@ -6,19 +6,33 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     use ProphecyTrait;
-	public function testInstantiation() : void
+
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+	public function testInstantiation( $loglevel ) : void
 	{
-		$loglevel = 0;
 		$sut = new StreamLoggerServiceProvider("", $loglevel);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 	public function createSut() : StreamLoggerServiceProvider
 	{
