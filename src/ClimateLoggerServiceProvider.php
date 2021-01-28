@@ -24,14 +24,22 @@ class ClimateLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param int Monolog Loglevel constant
+     * @param int|string Monolog or PSR-3 Loglevel constant.
      */
-    public function __construct(int $loglevel)
+    public function __construct($loglevel)
     {
         $this->loglevel = $loglevel;
 
-        $monolog_loglevel_name = MonologLogger::getLevelName($loglevel);
-        $this->loglevel_name = strtolower($monolog_loglevel_name);
+        if (is_int($loglevel)) {
+            $monolog_loglevel_name = MonologLogger::getLevelName($loglevel);
+            $this->loglevel_name = strtolower($monolog_loglevel_name);
+        }
+        elseif (is_string($loglevel)) {
+            $this->loglevel_name = strtolower($loglevel);
+        }
+        else {
+            throw new \InvalidArgumentException("Monolog or PSR-3 Loglevel constant.");
+        }
     }
 
 

@@ -8,22 +8,35 @@ use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\PsrHandler;
 use League\CLImate\Logger as CLImateLogger;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Psr\Log\LogLevel;
+use Monolog\Logger;
 
 class ClimateLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     use ProphecyTrait;
 
-	public function testInstantiation()
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+    public function testInstantiation($loglevel ) : void
 	{
-		$loglevel  = 100;
 		$sut = new ClimateLoggerServiceProvider($loglevel );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 
-	public function createSut()
+	public function createSut() : ClimateLoggerServiceProvider
 	{
 		$loglevel  = 100;
 		return new ClimateLoggerServiceProvider($loglevel );
@@ -34,7 +47,7 @@ class ClimateLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $expected_type)
+	public function testServiceFileTypes( $service, $expected_type) : void
 	{
 		$sut = $this->createSut();
 
@@ -67,7 +80,7 @@ class ClimateLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 	}
 
-	public function provideServicesAndInternalTypes()
+	public function provideServicesAndInternalTypes() : array
 	{
 		return array(
 			[ 'Monolog.Handlers', 'array' ]
@@ -79,7 +92,7 @@ class ClimateLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface)
+	public function testServiceInterfaces( $service, $expected_interface) : void
 	{
 		$sut = $this->createSut();
 
@@ -90,7 +103,7 @@ class ClimateLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-	public function provideServicesAndInterfaces()
+	public function provideServicesAndInterfaces() : array
 	{
 		return array(
 			[ 'Climate.PsrLogger.MonologHandler', PsrHandler::class ],

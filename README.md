@@ -62,7 +62,9 @@ echo get_class($logger);
 // Monolog\Logger
 ```
 
-This ***Monolog Handlers*** array is empty per default; it will be filled by one or more  of the specialised *Service Providers* below.
+This ***Monolog Handlers*** array is empty per default; it will be filled by one or more of the specialised *Service Providers* below. 
+
+Unless you want to add other handlers than those configured by the specialised Service providers you won't need to use these. 
 
 ```php
 $handlers = $dic['Monolog.Handlers'];
@@ -70,6 +72,8 @@ print_r($handlers); // Array ...
 ```
 
 This ***Monolog Processors*** array contains per default just Monolog's *WebProcessor* with `ip`, `method` and `url` extra context variables.
+
+Unless you want to add other processors than those configured by the specialised Service providers you won't need to use these. 
 
 ```php
 $processors = $dic['Monolog.Processors'];
@@ -82,7 +86,9 @@ print_r($processors); // Array ...
 
 ### Log to Logfile
 
-Class **FileLoggerServiceProvider** requires a *logfile path*. Optionally, you may pass a custom maximum *number of logfiles* (default: 30), and a *Monolog Loglevel constant* which defaults to `Monolog\Logger::DEBUG`.
+Class **FileLoggerServiceProvider** requires a *logfile path*. Optionally, you may pass a custom maximum *number of logfiles* (default: 30).
+
+To set the loglevel, pass *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). Default is `Monolog\Logger::DEBUG`.
 
 ```php
 <?php
@@ -96,7 +102,9 @@ $dic->register( new FileLoggerServiceProvider( "log/app.log", 30, \Monolog\Logge
 
 ### Log to StdErr (stream)
 
-Class **StreamLoggerServiceProvider** accepts optional parameters for an *output stream* (default: `php://stderr`) and a *Monolog Loglevel constant* which defaults to `Monolog\Logger::WARNING`.
+Class **StreamLoggerServiceProvider** accepts optional parameters for an *output stream* (default: `php://stderr`) and a loglevel, either *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). Default is `Monolog\Logger::DEBUG`.
+
+
 
 ```php
 <?php
@@ -116,7 +124,8 @@ This service requires service definitions for **SwiftMailer** and **SwiftMailer.
 $ composer require germania-kg/mailer
 ```
 
-Class **SwiftMailerLoggerServiceProvider** accepts optional parameters for *outer log level* and *inner loglevel,* both as a *Monolog Loglevel constants*. 
+Class **SwiftMailerLoggerServiceProvider** accepts optional parameters for *outer log level* and *inner loglevel,* both either *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). 
+
 
 The *outer loglevel* (default: `Monolog\Logger::WARNING`) will trigger Monolog's [FingersCrossedHandler](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Handler/FingersCrossedHandler.php) which in turn uses Monolog's [BufferHandler](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Handler/BufferHandler.php) to send an log messages digest using Monolog's [SwiftMailerHandler.](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Handler/SwiftMailerHandler.php) Any log message in the email sent will be of *inner loglevel* upwards (default: `Monolog\Logger::DEBUG`)
 
@@ -137,7 +146,7 @@ This requires **[CLImate](http://climate.thephpleague.com/)**, available with Co
 ```bash
 $ composer require league/climate
 ```
-Class **ClimateLoggerServiceProvider** requires a *Monolog Loglevel constant* (such as: `\Monolog\Logger::DEBUG`).
+Class **ClimateLoggerServiceProvider** requires a *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). 
 
 ```php
 <?php
@@ -150,7 +159,7 @@ $dic->register( new ClimateLoggerServiceProvider( \Monolog\Logger::DEBUG ));
 
 ### Log using BrowserConsole Logger
 
-Class **BrowserConsoleLoggerServiceProvider** optionally accepts a *Monolog Loglevel constant* (such as: `\Monolog\Logger::INFO`). If left out or set to `null`, logging to browser console will be skipped.
+Class **BrowserConsoleLoggerServiceProvider** optionally accepts a *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). If left out or set to `null`, logging to browser console will be skipped.
 
 ```php
 <?php
@@ -164,13 +173,15 @@ $dic->register( new BrowserConsoleLoggerServiceProvider( \Monolog\Logger::INFO )
 
 ### Log to Microsoft Teams
 
+**Sends nicely formatted log messages to *Microsoft Teams* using Monolog's [*HtmlFormatter*](https://github.com/Seldaek/monolog/blob/main/src/Monolog/Formatter/HtmlFormatter.php).**
+
 This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
 ```bash
 $ composer require cmdisp/monolog-microsoft-teams "^1.1"
 ```
 
-Class **TeamsLoggerServiceProvider** requires a *[Incoming Webhook URL](https://docs.microsoft.com/de-de/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook)* string, and optionally a *Monolog Loglevel constant* such as `Monolog\Logger::INFO`. Registering this ServiceProvider to a Pimple DI container will silently skip if the Webhook URL is empty.
+Class **TeamsLoggerServiceProvider** requires a *[Incoming Webhook URL](https://docs.microsoft.com/de-de/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook)* string, and optionally a *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). Registering this ServiceProvider to a Pimple DI container will silently skip if the Webhook URL is empty.
 
 ```php
 <?php
@@ -191,7 +202,7 @@ Class `Germania\Logger\HtmlFormattedTeamsLogHandler` was an extension of the `CM
 
 ### Log to Slack channel
 
-Class **SlackLoggerServiceProvider** requires *Slack token*, *channel*, and *username*. It optionally accepts a Monolog Loglevel constant whoch defaults to `\Monolog\Logger\CRITICAL`.
+Class **SlackLoggerServiceProvider** requires *Slack token*, *channel*, and *username*. It optionally accepts a *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). 
 
 For more information on using Slack as Logger, see these links:
 
@@ -224,8 +235,9 @@ $dic->register( new SlackLoggerServiceProvider(
 <?php
 use Germania\Logger\LoggerServiceProvider;
 use Germania\Logger\FileLoggerServiceProvider;
-use Monolog\Logger;
+use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 // 1. Basic setup
 $log_name     = "My App";
@@ -242,7 +254,8 @@ $dic->register( new LoggerServiceProvider(
 // 2. The 'LoggerServiceProvider' alone won't do anything.
 //    So, adding a specialized Service Provider is needed:
 $max_files_count = 30;
-$dic->register( new FileLoggerServiceProvider("log/app.log", 30, Logger::DEBUG ));
+$dic->register( new FileLoggerServiceProvider("log/app.log", 30, Monolog::DEBUG ));
+$dic->register( new FileLoggerServiceProvider("log/app.log", 30, LogLevel::DEBUG ));
 
 
 // 3. Now you can grab your PSR-3 Logger:

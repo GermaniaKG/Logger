@@ -6,6 +6,8 @@ use CMDISP\MonologMicrosoftTeams\TeamsLogHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
@@ -13,15 +15,28 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation()
+
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+	public function testInstantiation( $loglevel ) : void
 	{
-		$sut = new TeamsLoggerServiceProvider("webhook", 0);
+		$sut = new TeamsLoggerServiceProvider("webhook", $loglevel);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
 
-	public function createSut()
+	public function createSut() : TeamsLoggerServiceProvider
 	{
 		return new TeamsLoggerServiceProvider("logname", 0);
 	}
@@ -30,7 +45,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $expected_type)
+	public function testServiceFileTypes( $service, $expected_type) : void
 	{
 
 		$sut = $this->createSut();
@@ -62,7 +77,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
         endswitch;
 	}
 
-	public function provideServicesAndInternalTypes()
+	public function provideServicesAndInternalTypes() : array
 	{
 		return array(
 			[ 'Monolog.Handlers', 'array' ]
@@ -76,7 +91,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface)
+	public function testServiceInterfaces( $service, $expected_interface) : void
 	{
 
 		$sut = $this->createSut();
@@ -88,7 +103,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-	public function provideServicesAndInterfaces()
+	public function provideServicesAndInterfaces() : array
 	{
 		return array(
             [ 'Monolog.Handlers.TeamsHandler', TeamsLogHandler::class ]

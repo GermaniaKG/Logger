@@ -5,6 +5,8 @@ use Germania\Logger\SwiftMailerLoggerServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\FingersCrossedHandler;
+use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Germania\Mailer\MailerServiceProvider;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -13,15 +15,27 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation()
+
+    /**
+     * @dataProvider provideVariousLogLevels
+     */
+	public function testInstantiation($loglevel) : void
 	{
-		$loglevel  = 100;
 		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
+    public function provideVariousLogLevels() : array
+    {
+        return array(
+            [ 100 ],
+            [ LogLevel::INFO ],
+            [ Logger::WARNING ]
+        );
+    }
 
-	public function createSut()
+
+	public function createSut() : SwiftMailerLoggerServiceProvider
 	{
 		$loglevel  = 100;
 		return new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
@@ -30,7 +44,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-	public function testMonologHandlers( )
+	public function testMonologHandlers( ) : void
 	{
 
 		$loglevel  = 100;
@@ -57,7 +71,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-	public function testExceptionOnMissingSwiftMailer( )
+	public function testExceptionOnMissingSwiftMailer( ) : void
 	{
 
 		$loglevel  = 100;
@@ -69,7 +83,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function testExceptionOnMissingSwiftMailerHtmlMessage( )
+	public function testExceptionOnMissingSwiftMailerHtmlMessage( ) : void
 	{
 
 		$loglevel  = 100;
