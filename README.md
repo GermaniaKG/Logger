@@ -82,6 +82,19 @@ print_r($processors); // Array ...
 
 
 
+### Adding processors to handlers
+
+*Monolog handlers* are provided by Pimple services. Grab the handler instance and add another *Monolog Processor* by extending the service definition:
+
+```php
+$dic->extend('Monolog.Handlers.RotatingFileHandler', function($handler, $dic) {
+  $handler->pushProcessor( new \Monolog\Processor\IntrospectionProcessor );
+  return $handler;
+});
+```
+
+
+
 ## Specialised Service Providers
 
 ### Log to Logfile
@@ -96,6 +109,14 @@ use Germania\Logger\FileLoggerServiceProvider;
   
 $dic->register( new FileLoggerServiceProvider( "log/app.log" ));
 $dic->register( new FileLoggerServiceProvider( "log/app.log", 30, \Monolog\Logger::DEBUG));
+```
+
+**Retrieve the Monolog handler**
+
+This handler is an instance of `\Monolog\Handler\RotatingFileHandler`
+
+```php
+$handler = $dic['Monolog.Handlers.RotatingFileHandler'];
 ```
 
 
@@ -114,7 +135,15 @@ $dic->register( new StreamLoggerServiceProvider );
 $dic->register( new StreamLoggerServiceProvider("php://stderr", \Monolog\Logger::WARNING) );
 ```
 
+**Retrieve the Monolog handler**
 
+This handler is an instance of `\Monolog\Handler\StreamHandler`
+
+```php
+$handler = $dic['Monolog.Handlers.StreamHandler'];
+```
+
+#### 
 
 ### Log using SwiftMailer
 
@@ -137,7 +166,17 @@ $dic->register( new SwiftMailerLoggerServiceProvider );
 $dic->register( new SwiftMailerLoggerServiceProvider( \Monolog\Logger::WARNING ));
 ```
 
+**Retrieve the Monolog handler**
 
+Despite its name, the handler is actually an instance of `Monolog\Handler\FingersCrossedHandler` 
+which wraps an instance of `Monolog\Handler\BufferHandler`
+which wraps an instance of `Monolog\Handler\SwiftMailerHandler`
+
+```php
+$handler = $dic['Monolog.Handlers.SwiftMailerHandler'];
+```
+
+#### 
 
 ### Log using CLImate Logger
 
@@ -155,7 +194,15 @@ use Germania\Logger\ClimateLoggerServiceProvider;
 $dic->register( new ClimateLoggerServiceProvider( \Monolog\Logger::DEBUG ));
 ```
 
+**Retrieve the Monolog handler**
 
+N.B. This is actually a `Monolog\Handler\PsrHandler`instance which wraps a Climate Logger `League\CLImate\Logger`
+
+```php
+$handler = $dic['Climate.PsrLogger.MonologHandler'];
+```
+
+#### 
 
 ### Log using BrowserConsole Logger
 
@@ -169,7 +216,15 @@ $dic->register( new BrowserConsoleLoggerServiceProvider );
 $dic->register( new BrowserConsoleLoggerServiceProvider( \Monolog\Logger::INFO ));
 ```
 
+**Retrieve the Monolog handler**
 
+The handler is an instance of `Monolog\Handler\BrowserConsoleHandler`
+
+```php
+$handler = $dic['Monolog.Handlers.BrowserConsoleHandler'];
+```
+
+#### 
 
 ### Log to Microsoft Teams
 
@@ -198,7 +253,15 @@ $dic->register( new TeamsLoggerServiceProvider( $incoming_webhook_url, \Monolog\
 
 Class `Germania\Logger\HtmlFormattedTeamsLogHandler` was an extension of the `CMDISP\MonologMicrosoftTeams\TeamsLogHandler` class and provided better log message formatting. As of the v1.1 release of CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, this extension is not needed any longer and will be removed as of major release 5.
 
+**Retrieve the Monolog handler**
 
+The handler is an instance of `\CMDISP\MonologMicrosoftTeams\TeamsLogHandler`
+
+```php
+$handler = $dic['Monolog.Handlers.TeamsHandler'];
+```
+
+#### 
 
 ### Log to Slack channel
 
@@ -223,7 +286,15 @@ $dic->register( new SlackLoggerServiceProvider(
 
 ```
 
+**Retrieve the Monolog handler**
 
+The handler is an instance of `\Monolog\Handler\SlackHandler`
+
+```php
+$handler = $dic['Monolog.Handlers.SlackHandler'];
+```
+
+#### 
 
 ---
 
@@ -280,3 +351,4 @@ $ composer test
 # or
 $ vendor/bin/phpunit
 ```
+
