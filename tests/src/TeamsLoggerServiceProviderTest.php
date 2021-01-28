@@ -13,7 +13,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation()
+	public function testInstantiation() : void
 	{
 		$sut = new TeamsLoggerServiceProvider("webhook", 0);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
@@ -21,7 +21,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-	public function createSut()
+	public function createSut() : TeamsLoggerServiceProvider
 	{
 		return new TeamsLoggerServiceProvider("logname", 0);
 	}
@@ -30,7 +30,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $expected_type)
+	public function testServiceFileTypes( $service, $expected_type) : void
 	{
 
 		$sut = $this->createSut();
@@ -62,7 +62,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
         endswitch;
 	}
 
-	public function provideServicesAndInternalTypes()
+	public function provideServicesAndInternalTypes() : array
 	{
 		return array(
 			[ 'Monolog.Handlers', 'array' ]
@@ -76,7 +76,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface)
+	public function testServiceInterfaces( $service, $expected_interface) : void
 	{
 
 		$sut = $this->createSut();
@@ -88,7 +88,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-	public function provideServicesAndInterfaces()
+	public function provideServicesAndInterfaces() : array
 	{
 		return array(
             [ 'Monolog.Handlers.TeamsHandler', TeamsLogHandler::class ]

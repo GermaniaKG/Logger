@@ -13,7 +13,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation()
+	public function testInstantiation() : void
 	{
 		$loglevel  = 100;
 		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
@@ -21,7 +21,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function createSut()
+	public function createSut() : SwiftMailerLoggerServiceProvider
 	{
 		$loglevel  = 100;
 		return new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
@@ -30,7 +30,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-	public function testMonologHandlers( )
+	public function testMonologHandlers( ) : void
 	{
 
 		$loglevel  = 100;
@@ -57,7 +57,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-	public function testExceptionOnMissingSwiftMailer( )
+	public function testExceptionOnMissingSwiftMailer( ) : void
 	{
 
 		$loglevel  = 100;
@@ -69,7 +69,7 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function testExceptionOnMissingSwiftMailerHtmlMessage( )
+	public function testExceptionOnMissingSwiftMailerHtmlMessage( ) : void
 	{
 
 		$loglevel  = 100;

@@ -15,14 +15,14 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideCtorArgs
 	 */
-	public function testInstantiation( $logname, $server, $anonymize )
+	public function testInstantiation( $logname, $server, $anonymize ) : void
 	{
 
 		$sut = new LoggerServiceProvider($logname, $server, $anonymize);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 	}
 
-	public function provideCtorArgs()
+	public function provideCtorArgs() : array
 	{
 		return array(
 			[ "logname", array(), true ],
@@ -34,7 +34,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function createSut()
+	public function createSut() : LoggerServiceProvider
 	{
 		return new LoggerServiceProvider("logname", array(), true);
 	}
@@ -44,7 +44,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $expected_type)
+	public function testServiceFileTypes( $service, $expected_type) : void
 	{
 
 		$sut = $this->createSut();
@@ -76,7 +76,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
         endswitch;
 	}
 
-	public function provideServicesAndInternalTypes()
+	public function provideServicesAndInternalTypes() : array
 	{
 		return array(
 			[ 'Monolog.Handlers', 'array' ],
@@ -89,7 +89,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface)
+	public function testServiceInterfaces( $service, $expected_interface) : void
 	{
 
 		$sut = $this->createSut();
@@ -101,7 +101,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-	public function provideServicesAndInterfaces()
+	public function provideServicesAndInterfaces() : array
 	{
 		return array(
 			[ 'Logger',             LoggerInterface::class ],

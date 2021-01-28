@@ -13,7 +13,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
     use ProphecyTrait;
 
-	public function testInstantiation()
+	public function testInstantiation() : void
 	{
 		$loglevel  = 0;
 		$max_files = 0;
@@ -22,7 +22,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function createSut()
+	public function createSut() : FileLoggerServiceProvider
 	{
 		$loglevel  = 0;
 		$max_files = 0;
@@ -35,7 +35,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $expected_type)
+	public function testServiceFileTypes( $service, $expected_type) : void
 	{
 		$sut = $this->createSut();
 
@@ -66,7 +66,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
         endswitch;
 	}
 
-	public function provideServicesAndInternalTypes()
+	public function provideServicesAndInternalTypes() : array
 	{
 		return array(
 			[ 'Monolog.Handlers', 'array' ]
@@ -80,7 +80,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface)
+	public function testServiceInterfaces( $service, $expected_interface) : void
 	{
 		$sut = $this->createSut();
 
@@ -91,7 +91,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-	public function provideServicesAndInterfaces()
+	public function provideServicesAndInterfaces() : array
 	{
 		return array(
 			[ 'Monolog.Handlers.RotatingFileHandler', RotatingFileHandler::class ]

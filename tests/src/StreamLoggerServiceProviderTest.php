@@ -12,7 +12,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
 
     use ProphecyTrait;
-	public function testInstantiation()
+	public function testInstantiation() : void
 	{
 		$loglevel = 0;
 		$sut = new StreamLoggerServiceProvider("", $loglevel);
@@ -20,7 +20,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	public function createSut()
+	public function createSut() : StreamLoggerServiceProvider
 	{
 		$loglevel = 0;
 		return new StreamLoggerServiceProvider("", $loglevel);
@@ -32,7 +32,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInternalTypes
 	 */
-	public function testServiceFileTypes( $service, $expected_type)
+	public function testServiceFileTypes( $service, $expected_type) : void
 	{
 		$sut = $this->createSut();
 
@@ -63,7 +63,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
         endswitch;
 	}
 
-	public function provideServicesAndInternalTypes()
+	public function provideServicesAndInternalTypes() : array
 	{
 		return array(
 			[ 'Monolog.Handlers', 'array' ]
@@ -76,7 +76,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	/**
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface)
+	public function testServiceInterfaces( $service, $expected_interface) : void
 	{
 		$sut = $this->createSut();
 
@@ -87,7 +87,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$this->assertInstanceOf( $expected_interface, $result);
 	}
 
-	public function provideServicesAndInterfaces()
+	public function provideServicesAndInterfaces() : array
 	{
 		return array(
 			[ 'Monolog.Handlers.StreamHandler', StreamHandler::class ]
