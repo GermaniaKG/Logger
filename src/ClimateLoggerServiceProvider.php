@@ -63,5 +63,7 @@ class ClimateLoggerServiceProvider implements ServiceProviderInterface
             $loglevel = $this->loglevel_name;
             return new CLImateLogger($loglevel);
         };
+
+        return $dic;
     }
 }

@@ -47,17 +47,24 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
         }
 
 
-        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.TeamsHandler');
+        LoggerServiceProvider::addMonologHandler(TeamsLogHandler::class);
 
         /**
          * Send log messages to Microsoft Teams.
          *
-         * @return SlackHandler
+         * @return TeamsLogHandler
          */
-        $dic['Monolog.Handlers.TeamsHandler'] = function ($dic) {
+        $dic[TeamsLogHandler::class] = function ($dic) {
             $th = new TeamsLogHandler($this->incoming_webook_url, $this->loglevel);
             $th->setFormatter(new HtmlFormatter);
             return $th;
         };
+
+
+        $dic['Monolog.Handlers.TeamsHandler'] = function ($dic) {
+            return $dic[TeamsLogHandler::class];
+        };
+
+        return $dic;
     }
 }

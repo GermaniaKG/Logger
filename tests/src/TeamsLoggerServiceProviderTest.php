@@ -17,23 +17,13 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-	public function testInstantiation( $loglevel ) : void
+	public function testInstantiation( ) : TeamsLoggerServiceProvider
 	{
-		$sut = new TeamsLoggerServiceProvider("webhook", $loglevel);
+		$sut = new TeamsLoggerServiceProvider("webhook", LogLevel::INFO );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
-	}
 
-    public function provideVariousLogLevels() : array
-    {
-        return array(
-            [ 100 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
-    }
+        return TeamsLoggerServiceProvider;
+	}
 
 
 	public function createSut() : TeamsLoggerServiceProvider
@@ -42,59 +32,33 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	}
 
 
-	/**
-	 * @dataProvider provideServicesAndInternalTypes
-	 */
-	public function testServiceFileTypes( $service, $expected_type) : void
-	{
 
-		$sut = $this->createSut();
 
-		$container = new Container;
-		$container->register( $sut );
+    /**
+     * @depends testInstantiation
+     * @dataProvider provideServicesAndInterfaces
+     */
+    public function testWithArrays( $service, $expected_interface, $sut) : void
+    {
+        $array_dic = array();
+        $array_dic = $sut->register($array_dic);
 
-		$result = $container[ $service ];
-        switch($expected_type):
-            case "bool":
-                $this->assertIsBool( $result );
-                break;
-            case "array":
-                $this->assertIsArray( $result );
-                break;
-            case "callable":
-                $this->assertIsCallable( $result );
-                break;
+        $this->assertArrayHasKey( $service, $array_dic);
+        $this->assertIsCallable($array_dic[$service]);
 
-            default:
-                if (class_exists($expected_type)
-                or interface_exists($expected_type)):
-                    $this->assertInstanceOf( $expected_type, $result);
-                    break;
-                endif;
-
-                $msg = sprintf("Expected type '%s' not supported in this test method", $expected_type);
-                throw new \UnexpectedValueException( $msg );
-        endswitch;
-	}
-
-	public function provideServicesAndInternalTypes() : array
-	{
-		return array(
-			[ 'Monolog.Handlers', 'array' ]
-		);
-	}
-
+        $sut_pimple = new Container($array_dic);
+        $this->assertInstanceOf( $expected_interface, $sut_pimple[$service]);
+    }
 
 
 
 
 	/**
+     * @depends testInstantiation
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface) : void
+	public function testServiceInterfaces( $service, $expected_interface, $sut) : void
 	{
-
-		$sut = $this->createSut();
 
 		$container = new Container;
 		$container->register( $sut );
@@ -106,7 +70,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function provideServicesAndInterfaces() : array
 	{
 		return array(
-            [ 'Monolog.Handlers.TeamsHandler', TeamsLogHandler::class ]
+            [ TeamsLogHandler::class, TeamsLogHandler::class ]
 		);
 	}
 }

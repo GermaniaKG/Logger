@@ -63,7 +63,17 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
         }
 
 
-        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.SlackHandler');
+        LoggerServiceProvider::addMonologHandler(SlackHandler::class);
+
+
+
+        /**
+         * @deprecated
+         */
+        $dic['Monolog.Handlers.SlackHandler'] = function ($dic) {
+            return $dic[SlackHandler::class];
+        };
+
 
 
         /**
@@ -74,7 +84,7 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return SlackHandler
          */
-        $dic['Monolog.Handlers.SlackHandler'] = function ($dic) {
+        $dic[SlackHandler::class] = function ($dic) {
 
             // As hardcoded in SlackHandler class
             $useAttachment          = true;              // Whether the message should be added to Slack as attachment (plain text otherwise)
@@ -97,5 +107,8 @@ class SlackLoggerServiceProvider implements ServiceProviderInterface
 
             return new SlackHandler($token, $channel, $username, $useAttachment, $iconEmoji, $loglevel, $bubble, $useShortAttachment, $includeContextAndExtra, $excludeFields);
         };
+
+
+        return $dic;
     }
 }

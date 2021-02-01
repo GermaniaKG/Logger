@@ -91,7 +91,7 @@ print_r($processors); // Array ...
 *Monolog handlers* are provided by Pimple services. Grab the handler instance and add another *Monolog Processor* by extending the service definition:
 
 ```php
-$dic->extend('Monolog.Handlers.RotatingFileHandler', function($handler, $dic) {
+$dic->extend( \Monolog\Handler\RotatingFileHandler::class, function($handler, $dic) {
   $handler->pushProcessor( new \Monolog\Processor\IntrospectionProcessor );
   return $handler;
 });
@@ -121,6 +121,7 @@ This handler is an instance of `\Monolog\Handler\RotatingFileHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.RotatingFileHandler'];
+$handler = $dic[\Monolog\Handler\RotatingFileHandler::class];
 ```
 
 
@@ -145,6 +146,7 @@ This handler is an instance of `\Monolog\Handler\StreamHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.StreamHandler'];
+$handler = $dic[\Monolog\Handler\StreamHandler::class];
 ```
 
 
@@ -178,6 +180,7 @@ which wraps an instance of `Monolog\Handler\SwiftMailerHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.SwiftMailerHandler'];
+$handler = $dic[\Monolog\Handler\SwiftMailerHandler::class];
 ```
 
 
@@ -226,6 +229,7 @@ The handler is an instance of `Monolog\Handler\BrowserConsoleHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.BrowserConsoleHandler'];
+$handler = $dic[\Monolog\Handler\BrowserConsoleHandler::class];
 ```
 
 
@@ -263,6 +267,7 @@ The handler is an instance of `\CMDISP\MonologMicrosoftTeams\TeamsLogHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.TeamsHandler'];
+$handler = $dic[\CMDISP\MonologMicrosoftTeams\TeamsLogHandler::class];
 ```
 
 
@@ -296,6 +301,7 @@ The handler is an instance of `\Monolog\Handler\SlackHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.SlackHandler'];
+$handler = $dic[\Monolog\Handler\SlackHandler::class];
 ```
 
 

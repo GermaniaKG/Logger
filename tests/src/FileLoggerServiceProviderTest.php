@@ -16,46 +16,42 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
     use ProphecyTrait;
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-	public function testInstantiation( $loglevel ) : void
+	public function testInstantiation( ) : FileLoggerServiceProvider
 	{
-		$max_files = 0;
-		$sut = new FileLoggerServiceProvider("file", $max_files = 0, $loglevel );
+		$sut = new FileLoggerServiceProvider("file", $max_files = 0, $logelevel = LogLevel::INFO );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
+
+        return $sut;
 	}
 
-    public function provideVariousLogLevels() : array
+
+
+
+    /**
+     * @depends testInstantiation
+     * @dataProvider provideServicesAndInterfaces
+     */
+    public function testWithArrays( $service, $expected_interface, $sut) : void
     {
-        return array(
-            [ 0 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
+        $array_dic = array();
+        $array_dic = $sut->register($array_dic);
+
+        $this->assertArrayHasKey( $service, $array_dic);
+        $this->assertIsCallable($array_dic[$service]);
+
+        $sut_pimple = new Container($array_dic);
+        $this->assertInstanceOf( $expected_interface, $sut_pimple[$service]);
     }
-
-
-	public function createSut() : FileLoggerServiceProvider
-	{
-		$loglevel  = 0;
-		$max_files = 0;
-		return new FileLoggerServiceProvider("file", $max_files = 0, $loglevel );
-
-	}
-
-
 
 
 
 
 	/**
+      * @depends testInstantiation
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface) : void
+	public function testServiceInterfaces( $service, $expected_interface, $sut) : void
 	{
-		$sut = $this->createSut();
-
 		$container = new Container;
 		$container->register( $sut );
 
@@ -66,7 +62,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function provideServicesAndInterfaces() : array
 	{
 		return array(
-			[ 'Monolog.Handlers.RotatingFileHandler', RotatingFileHandler::class ]
+			[ RotatingFileHandler::class, RotatingFileHandler::class ]
 		);
 	}
 }

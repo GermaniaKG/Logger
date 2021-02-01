@@ -55,7 +55,13 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
 
 
 
-        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.SwiftMailerHandler');
+        LoggerServiceProvider::addMonologHandler(SwiftMailerHandler::class);
+
+
+
+        $dic['Monolog.Handlers.SwiftMailerHandler'] = function ($dic) {
+            return $dic[SwiftMailerHandler::class];
+        };
 
 
         /**
@@ -73,7 +79,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return FingersCrossedHandler
          */
-        $dic['Monolog.Handlers.SwiftMailerHandler'] = function ($dic) {
+        $dic[SwiftMailerHandler::class] = function ($dic) {
             $mailer   = $dic['SwiftMailer'];
 
             // The mail subject will be used for LineFormatter
@@ -88,5 +94,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
             // Build handler "sandwich"
             return new FingersCrossedHandler(new BufferHandler($mailerHandler), $this->outer_loglevel);
         };
+
+        return $dic;
     }
 }

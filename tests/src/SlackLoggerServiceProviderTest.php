@@ -16,23 +16,14 @@ class SlackLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-    public function testInstantiation( $loglevel ) : void
+    public function testInstantiation( ) : ServiceProviderInterface
 	{
-		$sut = new SlackLoggerServiceProvider("token", "channel", "username", $loglevel);
+		$sut = new SlackLoggerServiceProvider("token", "channel", "username", $loglevel = LogLevel::INFO);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
+
+        return $sut;
 	}
 
-    public function provideVariousLogLevels() : array
-    {
-        return array(
-            [ 0 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
-    }
 
 
 	public function createSut() : SlackLoggerServiceProvider
@@ -42,14 +33,29 @@ class SlackLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 
 
+    /**
+     * @depends testInstantiation
+     * @dataProvider provideServicesAndInterfaces
+     */
+    public function testWithArrays( $service, $expected_interface, $sut) : void
+    {
+        $array_dic = array();
+        $array_dic = $sut->register($array_dic);
+
+        $this->assertArrayHasKey( $service, $array_dic);
+        $this->assertIsCallable($array_dic[$service]);
+
+        $sut_pimple = new Container($array_dic);
+        $this->assertInstanceOf( $expected_interface, $sut_pimple[$service]);
+    }
+
 
 	/**
+     * @depends testInstantiation
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface) : void
+	public function testServiceInterfaces( $service, $expected_interface, $sut) : void
 	{
-		$sut = $this->createSut();
-
 		$container = new Container;
 		$container->register( $sut );
 
@@ -60,7 +66,7 @@ class SlackLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function provideServicesAndInterfaces() : array
 	{
 		return array(
-			[ 'Monolog.Handlers.SlackHandler', SlackHandler::class ]
+			[ SlackHandler::class, SlackHandler::class ]
 		);
 	}
 }

@@ -16,29 +16,39 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
     use ProphecyTrait;
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-	public function testInstantiation( $loglevel ) : void
+	public function testInstantiation( ) : StreamLoggerServiceProvider
 	{
-		$sut = new StreamLoggerServiceProvider("", $loglevel);
+		$sut = new StreamLoggerServiceProvider("", $loglevel = LogLevel::INFO );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
+
+        return $sut;
 	}
 
-    public function provideVariousLogLevels() : array
-    {
-        return array(
-            [ 100 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
-    }
+
 
 	public function createSut() : StreamLoggerServiceProvider
 	{
 		$loglevel = 0;
 		return new StreamLoggerServiceProvider("", $loglevel);
 	}
+
+
+
+    /**
+     * @depends testInstantiation
+     * @dataProvider provideServicesAndInterfaces
+     */
+    public function testWithArrays( $service, $expected_interface, $sut) : void
+    {
+        $array_dic = array();
+        $array_dic = $sut->register($array_dic);
+
+        $this->assertArrayHasKey( $service, $array_dic);
+        $this->assertIsCallable($array_dic[$service]);
+
+        $sut_pimple = new Container($array_dic);
+        $this->assertInstanceOf( $expected_interface, $sut_pimple[$service]);
+    }
 
 
 
@@ -61,7 +71,7 @@ class StreamLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function provideServicesAndInterfaces() : array
 	{
 		return array(
-			[ 'Monolog.Handlers.StreamHandler', StreamHandler::class ]
+			[ StreamHandler::class, StreamHandler::class ]
 		);
 	}
 }

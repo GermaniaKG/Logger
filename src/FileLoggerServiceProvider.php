@@ -53,22 +53,30 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
     {
         // Do nothing when no logfile is set
         if (empty($this->logfile)) {
-            return;
+            return $dic;
         }
 
 
-        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.RotatingFileHandler');
+        LoggerServiceProvider::addMonologHandler(RotatingFileHandler::class);
+
+
+        $dic['Monolog.Handlers.RotatingFileHandler'] = function ($dic) {
+            return $dic[RotatingFileHandler::class];
+        };
 
 
         /**
          * @return RotatingFileHandler
          */
-        $dic['Monolog.Handlers.RotatingFileHandler'] = function ($dic) {
+        $dic[RotatingFileHandler::class] = function ($dic) {
             $logfile   = $this->logfile;
             $max_files = $this->max_files;
             $loglevel  = $this->loglevel;
 
             return new RotatingFileHandler($logfile, $max_files, $loglevel);
         };
+
+
+        return $dic;
     }
 }

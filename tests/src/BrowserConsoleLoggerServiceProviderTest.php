@@ -26,25 +26,30 @@ class BrowserConsoleLoggerServiceProviderTest extends \PHPUnit\Framework\TestCas
 	}
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-    public function testVariousLogLevels( $loglevel ) : BrowserConsoleLoggerServiceProvider
+    public function testVariousLogLevels() : BrowserConsoleLoggerServiceProvider
     {
-        $sut = new BrowserConsoleLoggerServiceProvider( $loglevel );
+        $sut = new BrowserConsoleLoggerServiceProvider( $loglevel = LogLevel::INFO );
         $this->assertInstanceOf( ServiceProviderInterface::class, $sut);
         return $sut;
     }
 
-    public function provideVariousLogLevels() : array
-    {
-        return array(
-            [ 100 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
-    }
 
+
+    /**
+     * @depends testInstantiation
+     * @dataProvider provideServicesAndInterfaces
+     */
+    public function testWithArrays( $service, $expected_interface, $sut) : void
+    {
+        $array_dic = array();
+        $array_dic = $sut->register($array_dic);
+
+        $this->assertArrayHasKey( $service, $array_dic);
+        $this->assertIsCallable($array_dic[$service]);
+
+        $sut_pimple = new Container($array_dic);
+        $this->assertInstanceOf( $expected_interface, $sut_pimple[$service]);
+    }
 
 
 	/**
@@ -64,7 +69,7 @@ class BrowserConsoleLoggerServiceProviderTest extends \PHPUnit\Framework\TestCas
 	public function provideServicesAndInterfaces() : array
 	{
 		return array(
-			[ 'Monolog.Handlers.BrowserConsoleHandler', BrowserConsoleHandler::class ]
+			[ BrowserConsoleHandler::class, BrowserConsoleHandler::class ]
 		);
 	}
 }

@@ -47,23 +47,34 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
     {
 
 
-        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.StreamHandler');
+        LoggerServiceProvider::addMonologHandler(StreamHandler::class);
+
+
 
 
         /**
          * @return StreamHandler
          */
         $dic['Monolog.Handlers.StreamHandler'] = function ($dic) {
+            return $dic[StreamHandler::class];
+        };
+
+
+        /**
+         * @return StreamHandler
+         */
+        $dic[StreamHandler::class] = function ($dic) {
             $stream     = $this->stream;
             $loglevel   = $this->loglevel;
 
             $stream_handler = new StreamHandler($stream, $loglevel);
 
-            $formatter = $dic['Monolog.Formatters.ColoredLineFormatter'];
+            $formatter = $dic[ColoredLineFormatter::class];
             $stream_handler->setFormatter($formatter);
 
             return $stream_handler;
         };
+
 
 
         /**
@@ -79,9 +90,11 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
          * @see  https://github.com/bramus/monolog-colored-line-formatter/blob/master/src/Formatter/ColoredLineFormatter.php
          * @return  ColoredLineFormatter from Bramus
          */
-        $dic['Monolog.Formatters.ColoredLineFormatter'] = function ($dic) {
+        $dic[ColoredLineFormatter::class] = function ($dic) {
             $format = $dic['Monolog.Handlers.StreamHandler.FormatLine'];
             return new ColoredLineFormatter(null, $format, null, false, "ignore_empty");
         };
+
+        return $dic;
     }
 }

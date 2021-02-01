@@ -38,15 +38,24 @@ class BrowserConsoleLoggerServiceProvider implements ServiceProviderInterface
         }
 
 
-        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.BrowserConsoleHandler');
+        LoggerServiceProvider::addMonologHandler(BrowserConsoleHandler::class);
 
 
         /**
          * @return BrowserConsoleHandler
          */
-        $dic['Monolog.Handlers.BrowserConsoleHandler'] = function ($dic) {
+        $dic[BrowserConsoleHandler::class] = function ($dic) {
             $th = new BrowserConsoleHandler($this->loglevel);
             return $th;
         };
+
+        /**
+         * @return BrowserConsoleHandler
+         */
+        $dic['Monolog.Handlers.BrowserConsoleHandler'] = function ($dic) {
+            return $dic[BrowserConsoleHandler::class];
+        };
+
+        return $dic;
     }
 }
