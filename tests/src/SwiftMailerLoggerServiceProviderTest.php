@@ -61,11 +61,8 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 			return $default;
 		});
 
-
-		$container->register( $sut );
-
-		$result = $container['Monolog.Handlers'];
-		$this->assertIsArray($result);
+		$result = $container->register( $sut );
+        $this->assertNotNull($result);
 	}
 
 

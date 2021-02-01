@@ -52,9 +52,13 @@ This ***Monolog Logger*** instance is your PSR-3 Logger:
 ```php
 <?php
 use Psr\Log\LoggerInterface;
+use Monolog\Logger as MonologLogger;
 
 // These are equal and refer to the same instance:
 $logger = $dic[LoggerInterface::class];
+$logger = $dic[MonologLogger::class];
+
+// Deprecated service names
 $logger = $dic['Monolog.Psr3Logger'];
 $logger = $dic['Logger'];
 
@@ -294,7 +298,7 @@ The handler is an instance of `\Monolog\Handler\SlackHandler`
 $handler = $dic['Monolog.Handlers.SlackHandler'];
 ```
 
-#### 
+
 
 ---
 

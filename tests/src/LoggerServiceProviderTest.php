@@ -5,6 +5,7 @@ use Germania\Logger\LoggerServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Monolog\Handler\AbstractHandler;
+use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -36,6 +37,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 	public function createSut() : LoggerServiceProvider
 	{
+        LoggerServiceProvider::resetMonologHandlers();
 		return new LoggerServiceProvider("logname", array(), true);
 	}
 
@@ -51,6 +53,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 
 		$container = new Container;
 		$container->register( $sut );
+
 
 		$result = $container[ $service ];
         switch($expected_type):
@@ -106,6 +109,7 @@ class LoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		return array(
 			[ 'Logger',             LoggerInterface::class ],
 			[ 'Monolog.Psr3Logger', LoggerInterface::class ],
+            [ MonologLogger::class, LoggerInterface::class ],
             [ LoggerInterface::class, LoggerInterface::class ]
 		);
 	}

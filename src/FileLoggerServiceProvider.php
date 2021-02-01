@@ -46,10 +46,10 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param  Container $dic [description]
-     * @return void
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
      */
-    public function register(Container $dic)
+    public function register($dic)
     {
         // Do nothing when no logfile is set
         if (empty($this->logfile)) {
@@ -57,21 +57,7 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
         }
 
 
-        // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists('Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function ($dic) {
-                return array();
-            };
-        endif;
-
-
-        /**
-         * @return array
-         */
-        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
-            $handlers[] = $dic['Monolog.Handlers.RotatingFileHandler'];
-            return $handlers;
-        });
+        LoggerServiceProvider::addMonologHandler('Monolog.Handlers.RotatingFileHandler');
 
 
         /**
