@@ -143,7 +143,7 @@ This handler is an instance of `\Monolog\Handler\StreamHandler`
 $handler = $dic['Monolog.Handlers.StreamHandler'];
 ```
 
-#### 
+
 
 ### Log using SwiftMailer
 
@@ -176,7 +176,7 @@ which wraps an instance of `Monolog\Handler\SwiftMailerHandler`
 $handler = $dic['Monolog.Handlers.SwiftMailerHandler'];
 ```
 
-#### 
+
 
 ### Log using CLImate Logger
 
@@ -202,7 +202,7 @@ N.B. This is actually a `Monolog\Handler\PsrHandler`instance which wraps a Clima
 $handler = $dic['Climate.PsrLogger.MonologHandler'];
 ```
 
-#### 
+
 
 ### Log using BrowserConsole Logger
 
@@ -224,7 +224,7 @@ The handler is an instance of `Monolog\Handler\BrowserConsoleHandler`
 $handler = $dic['Monolog.Handlers.BrowserConsoleHandler'];
 ```
 
-#### 
+
 
 ### Log to Microsoft Teams
 
@@ -233,7 +233,7 @@ $handler = $dic['Monolog.Handlers.BrowserConsoleHandler'];
 This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
 ```bash
-$ composer require cmdisp/monolog-microsoft-teams "^1.1"
+$ composer require cmdisp/monolog-microsoft-teams "^1.2"
 ```
 
 Class **TeamsLoggerServiceProvider** requires a *[Incoming Webhook URL](https://docs.microsoft.com/de-de/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook)* string, and optionally a *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). Registering this ServiceProvider to a Pimple DI container will silently skip if the Webhook URL is empty.
@@ -261,7 +261,7 @@ The handler is an instance of `\CMDISP\MonologMicrosoftTeams\TeamsLogHandler`
 $handler = $dic['Monolog.Handlers.TeamsHandler'];
 ```
 
-#### 
+
 
 ### Log to Slack channel
 

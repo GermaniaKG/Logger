@@ -891,16 +891,16 @@
         },
         {
             "name": "germania-kg/mailer",
-            "version": "1.1.1",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GermaniaKG/Mailer.git",
-                "reference": "9f802d2c0e942eb416a5772116780c81f31d8a9b"
+                "reference": "6e8bcf9e968e740b3871e8255a9474b83b3f1bfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GermaniaKG/Mailer/zipball/9f802d2c0e942eb416a5772116780c81f31d8a9b",
-                "reference": "9f802d2c0e942eb416a5772116780c81f31d8a9b",
+                "url": "https://api.github.com/repos/GermaniaKG/Mailer/zipball/6e8bcf9e968e740b3871e8255a9474b83b3f1bfd",
+                "reference": "6e8bcf9e968e740b3871e8255a9474b83b3f1bfd",
                 "shasum": ""
             },
             "require": {
@@ -935,9 +935,9 @@
             "description": "Pimple Service Provider for email and SwiftMailer services.",
             "support": {
                 "issues": "https://github.com/GermaniaKG/Mailer/issues",
-                "source": "https://github.com/GermaniaKG/Mailer/tree/1.1.1"
+                "source": "https://github.com/GermaniaKG/Mailer/tree/1.2.1"
             },
-            "time": "2021-01-11T12:15:16+00:00"
+            "time": "2021-01-28T15:26:10+00:00"
         },
         {
             "name": "germania-kg/swiftmailer-callable",
