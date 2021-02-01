@@ -27,40 +27,35 @@ class BrowserConsoleLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param  Container $dic [description]
-     * @return void
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
      */
-    public function register(Container $dic)
+    public function register($dic)
     {
         // Do nothing when no loglevel is set
         if (empty($this->loglevel)) {
             return;
         }
 
-        // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists('Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function ($dic) {
-                return array();
-            };
-        endif;
 
-
-        /**
-         * @return array
-         */
-        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
-            $handlers[] = $dic['Monolog.Handlers.BrowserConsoleHandler'];
-            return $handlers;
-        });
-
+        LoggerServiceProvider::addMonologHandler(BrowserConsoleHandler::class);
 
 
         /**
          * @return BrowserConsoleHandler
          */
-        $dic['Monolog.Handlers.BrowserConsoleHandler'] = function ($dic) {
+        $dic[BrowserConsoleHandler::class] = function ($dic) {
             $th = new BrowserConsoleHandler($this->loglevel);
             return $th;
         };
+
+        /**
+         * @return BrowserConsoleHandler
+         */
+        $dic['Monolog.Handlers.BrowserConsoleHandler'] = function ($dic) {
+            return $dic[BrowserConsoleHandler::class];
+        };
+
+        return $dic;
     }
 }

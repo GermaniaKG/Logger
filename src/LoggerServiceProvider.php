@@ -24,6 +24,13 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
+     * @var array
+     */
+    public static $monolog_handler_definitions = array();
+
+
+
+    /**
      * @param string   $logger_name    App or logger name
      * @param array    $server_data    Server data, default is `$_SERVER`
      * @param boolean  $anonymize_ip   Whether to anonymize client IPs
@@ -39,18 +46,36 @@ class LoggerServiceProvider implements ServiceProviderInterface
     }
 
 
-    /**
-     * @return void
-     */
-    public function register(Container $dic)
+    public static function addMonologHandler( string $def )
     {
+        static::$monolog_handler_definitions[] = $def;
+    }
+
+
+    public static function resetMonologHandlers()
+    {
+        static::$monolog_handler_definitions = array();
+    }
+
+
+
+    /**
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
+     */
+    public function register($dic)
+    {
+
+        if (!is_array($dic) and !$dic instanceOf \ArrayAccess) {
+            throw new \InvalidArgumentException("Array or ArrayAccess expected");
+        }
 
 
         /**
          * @return \Monolog\Logger
          */
         $dic[LoggerInterface::class] = function ($dic) {
-            return $dic['Monolog.Psr3Logger'];
+            return $dic[MonologLogger::class];
         };
 
 
@@ -59,7 +84,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
          * @return \Monolog\Logger
          */
         $dic['Logger'] = function ($dic) {
-            return $dic['Monolog.Psr3Logger'];
+            return $dic[MonologLogger::class];
         };
 
 
@@ -81,9 +106,17 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
 
         /**
-         * @return MonologLogger
+         * @deprecated
          */
         $dic['Monolog.Psr3Logger'] = function ($dic) {
+            return $dic[MonologLogger::class];
+        };
+
+
+        /**
+         * @return MonologLogger
+         */
+        $dic[MonologLogger::class] = function ($dic) {
             $handlers   = $dic['Monolog.Handlers'];
             $processors = $dic['Monolog.Processors'];
             $title      = $dic['Logger.name'];
@@ -96,7 +129,9 @@ class LoggerServiceProvider implements ServiceProviderInterface
          * @return array
          */
         $dic['Monolog.Handlers'] = function ($dic) {
-            return array();
+            return array_map(function($def) use ($dic) {
+                return $dic[$def];
+            }, static::$monolog_handler_definitions);
         };
 
 
@@ -106,8 +141,8 @@ class LoggerServiceProvider implements ServiceProviderInterface
          */
         $dic['Monolog.Processors'] = function ($dic) {
             return array(
-                $dic['Monolog.Processors.PsrLogMessages'],
-                $dic['Monolog.Processors.WebProcessor']
+                $dic[PsrLogMessageProcessor::class],
+                $dic[WebProcessor::class]
             );
         };
 
@@ -116,19 +151,22 @@ class LoggerServiceProvider implements ServiceProviderInterface
          * @see https://github.com/Seldaek/monolog/blob/master/src/Monolog/Processor/PsrLogMessageProcessor.php
          * @return PsrLogMessageProcessor
          */
-        $dic['Monolog.Processors.PsrLogMessages'] = function ($dic) {
+        $dic[PsrLogMessageProcessor::class] = function ($dic) {
             return new PsrLogMessageProcessor(null, true);
         };
+
 
 
         /**
          * @return WebProcessor
          */
-        $dic['Monolog.Processors.WebProcessor'] = function ($dic) {
+        $dic[WebProcessor::class] = function ($dic) {
             $server_data  = $dic['Logger.Environment'];
             $extra_fields = $dic['Monolog.Processors.WebProcessor.extraFields'];
             return new WebProcessor($server_data, $extra_fields);
         };
+
+
 
 
         /**
@@ -143,5 +181,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
                 'ip'
             ];
         };
+
+        return $dic;
     }
 }

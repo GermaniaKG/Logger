@@ -16,88 +16,42 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
     use ProphecyTrait;
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-	public function testInstantiation( $loglevel ) : void
+	public function testInstantiation( ) : FileLoggerServiceProvider
 	{
-		$max_files = 0;
-		$sut = new FileLoggerServiceProvider("file", $max_files = 0, $loglevel );
+		$sut = new FileLoggerServiceProvider("file", $max_files = 0, $logelevel = LogLevel::INFO );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
+
+        return $sut;
 	}
 
-    public function provideVariousLogLevels() : array
+
+
+
+    /**
+     * @depends testInstantiation
+     * @dataProvider provideServicesAndInterfaces
+     */
+    public function testWithArrays( $service, $expected_interface, $sut) : void
     {
-        return array(
-            [ 0 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
+        $array_dic = array();
+        $array_dic = $sut->register($array_dic);
+
+        $this->assertArrayHasKey( $service, $array_dic);
+        $this->assertIsCallable($array_dic[$service]);
+
+        $sut_pimple = new Container($array_dic);
+        $this->assertInstanceOf( $expected_interface, $sut_pimple[$service]);
     }
 
 
-	public function createSut() : FileLoggerServiceProvider
-	{
-		$loglevel  = 0;
-		$max_files = 0;
-		return new FileLoggerServiceProvider("file", $max_files = 0, $loglevel );
-
-	}
-
 
 
 	/**
-	 * @dataProvider provideServicesAndInternalTypes
-	 */
-	public function testServiceFileTypes( $service, $expected_type) : void
-	{
-		$sut = $this->createSut();
-
-		$container = new Container;
-		$container->register( $sut );
-
-		$result = $container[ $service ];
-        switch($expected_type):
-            case "bool":
-                $this->assertIsBool( $result );
-                break;
-            case "array":
-                $this->assertIsArray( $result );
-                break;
-            case "callable":
-                $this->assertIsCallable( $result );
-                break;
-
-            default:
-                if (class_exists($expected_type)
-                or interface_exists($expected_type)):
-                    $this->assertInstanceOf( $expected_type, $result);
-                    break;
-                endif;
-
-                $msg = sprintf("Expected type '%s' not supported in this test method", $expected_type);
-                throw new \UnexpectedValueException( $msg );
-        endswitch;
-	}
-
-	public function provideServicesAndInternalTypes() : array
-	{
-		return array(
-			[ 'Monolog.Handlers', 'array' ]
-		);
-	}
-
-
-
-
-
-	/**
+      * @depends testInstantiation
 	 * @dataProvider provideServicesAndInterfaces
 	 */
-	public function testServiceInterfaces( $service, $expected_interface) : void
+	public function testServiceInterfaces( $service, $expected_interface, $sut) : void
 	{
-		$sut = $this->createSut();
-
 		$container = new Container;
 		$container->register( $sut );
 
@@ -108,7 +62,7 @@ class FileLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 	public function provideServicesAndInterfaces() : array
 	{
 		return array(
-			[ 'Monolog.Handlers.RotatingFileHandler', RotatingFileHandler::class ]
+			[ RotatingFileHandler::class, RotatingFileHandler::class ]
 		);
 	}
 }

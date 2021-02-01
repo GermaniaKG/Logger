@@ -9,6 +9,7 @@ use Monolog\Logger;
 use Psr\Log\LogLevel;
 use Germania\Mailer\MailerServiceProvider;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Monolog\Handler\SwiftMailerHandler;
 
 class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,31 +17,13 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
     use ProphecyTrait;
 
 
-    /**
-     * @dataProvider provideVariousLogLevels
-     */
-	public function testInstantiation($loglevel) : void
+	public function testInstantiation() : SwiftMailerLoggerServiceProvider
 	{
-		$sut = new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
+		$sut = new SwiftMailerLoggerServiceProvider(LogLevel::WARNING, LogLevel::INFO);
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
+
+        return $sut;
 	}
-
-    public function provideVariousLogLevels() : array
-    {
-        return array(
-            [ 100 ],
-            [ LogLevel::INFO ],
-            [ Logger::WARNING ]
-        );
-    }
-
-
-	public function createSut() : SwiftMailerLoggerServiceProvider
-	{
-		$loglevel  = 100;
-		return new SwiftMailerLoggerServiceProvider($loglevel, $loglevel );
-	}
-
 
 
 
@@ -61,15 +44,19 @@ class SwiftMailerLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 			return $default;
 		});
 
-
-		$container->register( $sut );
-
-		$result = $container['Monolog.Handlers'];
-		$this->assertIsArray($result);
+		$result = $container->register( $sut );
+        $this->assertNotNull($result);
 	}
 
 
 
+
+    public function provideServicesAndInterfaces() : array
+    {
+        return array(
+            [ SwiftMailerHandler::class, SwiftMailerHandler::class ]
+        );
+    }
 
 	public function testExceptionOnMissingSwiftMailer( ) : void
 	{

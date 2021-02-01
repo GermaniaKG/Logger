@@ -46,43 +46,37 @@ class FileLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param  Container $dic [description]
-     * @return void
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
      */
-    public function register(Container $dic)
+    public function register($dic)
     {
         // Do nothing when no logfile is set
         if (empty($this->logfile)) {
-            return;
+            return $dic;
         }
 
 
-        // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists('Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function ($dic) {
-                return array();
-            };
-        endif;
+        LoggerServiceProvider::addMonologHandler(RotatingFileHandler::class);
 
 
-        /**
-         * @return array
-         */
-        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
-            $handlers[] = $dic['Monolog.Handlers.RotatingFileHandler'];
-            return $handlers;
-        });
+        $dic['Monolog.Handlers.RotatingFileHandler'] = function ($dic) {
+            return $dic[RotatingFileHandler::class];
+        };
 
 
         /**
          * @return RotatingFileHandler
          */
-        $dic['Monolog.Handlers.RotatingFileHandler'] = function ($dic) {
+        $dic[RotatingFileHandler::class] = function ($dic) {
             $logfile   = $this->logfile;
             $max_files = $this->max_files;
             $loglevel  = $this->loglevel;
 
             return new RotatingFileHandler($logfile, $max_files, $loglevel);
         };
+
+
+        return $dic;
     }
 }

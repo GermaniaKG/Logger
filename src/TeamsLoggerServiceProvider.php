@@ -35,10 +35,10 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param  Container $dic [description]
-     * @return void
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
      */
-    public function register(Container $dic)
+    public function register($dic)
     {
 
         // Do nothing when no incoming_webook_url is set
@@ -47,33 +47,24 @@ class TeamsLoggerServiceProvider implements ServiceProviderInterface
         }
 
 
-        // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists('Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function ($dic) {
-                return array();
-            };
-        endif;
-
-
-        /**
-         * @return array
-         */
-        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
-            $handlers[] = $dic['Monolog.Handlers.TeamsHandler'];
-            return $handlers;
-        });
-
-
+        LoggerServiceProvider::addMonologHandler(TeamsLogHandler::class);
 
         /**
          * Send log messages to Microsoft Teams.
          *
-         * @return SlackHandler
+         * @return TeamsLogHandler
          */
-        $dic['Monolog.Handlers.TeamsHandler'] = function ($dic) {
+        $dic[TeamsLogHandler::class] = function ($dic) {
             $th = new TeamsLogHandler($this->incoming_webook_url, $this->loglevel);
             $th->setFormatter(new HtmlFormatter);
             return $th;
         };
+
+
+        $dic['Monolog.Handlers.TeamsHandler'] = function ($dic) {
+            return $dic[TeamsLogHandler::class];
+        };
+
+        return $dic;
     }
 }

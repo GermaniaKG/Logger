@@ -39,10 +39,10 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param  Container $dic [description]
-     * @return void
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
      */
-    public function register(Container $dic)
+    public function register($dic)
     {
         if (!$dic->offsetExists("SwiftMailer")) :
             throw new \RuntimeException("This service provider requires a 'SwiftMailer' service.");
@@ -53,20 +53,15 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
         endif;
 
 
-        // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists('Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function ($dic) {
-                return array();
-            };
-        endif;
 
-        /**
-         * @return array
-         */
-        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
-            $handlers[] = $dic['Monolog.Handlers.SwiftMailerHandler'];
-            return $handlers;
-        });
+
+        LoggerServiceProvider::addMonologHandler(SwiftMailerHandler::class);
+
+
+
+        $dic['Monolog.Handlers.SwiftMailerHandler'] = function ($dic) {
+            return $dic[SwiftMailerHandler::class];
+        };
 
 
         /**
@@ -84,7 +79,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
          *
          * @return FingersCrossedHandler
          */
-        $dic['Monolog.Handlers.SwiftMailerHandler'] = function ($dic) {
+        $dic[SwiftMailerHandler::class] = function ($dic) {
             $mailer   = $dic['SwiftMailer'];
 
             // The mail subject will be used for LineFormatter
@@ -99,5 +94,7 @@ class SwiftMailerLoggerServiceProvider implements ServiceProviderInterface
             // Build handler "sandwich"
             return new FingersCrossedHandler(new BufferHandler($mailerHandler), $this->outer_loglevel);
         };
+
+        return $dic;
     }
 }

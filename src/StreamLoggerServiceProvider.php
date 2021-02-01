@@ -40,45 +40,41 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
 
 
     /**
-     * @param  Container $dic [description]
-     * @return void
+     * @param  \ArrayAccess|array $dic  DI Container
+     * @return \ArrayAccess|array DI Container
      */
-    public function register(Container $dic)
+    public function register($dic)
     {
 
 
-
-        // Make sure there's a 'Monolog.Handlers' service
-        if (!$dic->offsetExists('Monolog.Handlers')) :
-            $dic['Monolog.Handlers'] = function ($dic) {
-                return array();
-            };
-        endif;
+        LoggerServiceProvider::addMonologHandler(StreamHandler::class);
 
 
-        /**
-         * @return array
-         */
-        $dic->extend('Monolog.Handlers', function (array $handlers, $dic) {
-            $handlers[] = $dic['Monolog.Handlers.StreamHandler'];
-            return $handlers;
-        });
 
 
         /**
          * @return StreamHandler
          */
         $dic['Monolog.Handlers.StreamHandler'] = function ($dic) {
+            return $dic[StreamHandler::class];
+        };
+
+
+        /**
+         * @return StreamHandler
+         */
+        $dic[StreamHandler::class] = function ($dic) {
             $stream     = $this->stream;
             $loglevel   = $this->loglevel;
 
             $stream_handler = new StreamHandler($stream, $loglevel);
 
-            $formatter = $dic['Monolog.Formatters.ColoredLineFormatter'];
+            $formatter = $dic[ColoredLineFormatter::class];
             $stream_handler->setFormatter($formatter);
 
             return $stream_handler;
         };
+
 
 
         /**
@@ -94,9 +90,11 @@ class StreamLoggerServiceProvider implements ServiceProviderInterface
          * @see  https://github.com/bramus/monolog-colored-line-formatter/blob/master/src/Formatter/ColoredLineFormatter.php
          * @return  ColoredLineFormatter from Bramus
          */
-        $dic['Monolog.Formatters.ColoredLineFormatter'] = function ($dic) {
+        $dic[ColoredLineFormatter::class] = function ($dic) {
             $format = $dic['Monolog.Handlers.StreamHandler.FormatLine'];
             return new ColoredLineFormatter(null, $format, null, false, "ignore_empty");
         };
+
+        return $dic;
     }
 }

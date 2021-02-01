@@ -7,7 +7,7 @@
 # Germania KG · Logger
 
 **Default logging solution for our websites:**
-**Pimple Service Provider for Logging with Monolog 1 and 2.**
+**Service Provider for Logging with Monolog 1 and 2.**
 
 [![Packagist](https://img.shields.io/packagist/v/germania-kg/logger.svg?style=flat)](https://packagist.org/packages/germania-kg/logger)
 [![PHP version](https://img.shields.io/packagist/php-v/germania-kg/logger.svg)](https://packagist.org/packages/germania-kg/logger)
@@ -27,9 +27,10 @@ $ composer require germania-kg/logger
 ```
 
 
-## Setup
 
-Class **LoggerServiceProvider** is a Pimple *ServiceProviderInterface* and can be registered to any Pimple DI container. Its constructor requires the *App or Logger* name. – Optionally, the `$_SERVER` context may pe passed. An optional third parameter turns on IP address anonymizing:
+## Basics
+
+Class **LoggerServiceProvider** is a Pimple *ServiceProviderInterface* and can be registered to any Pimple DI container *(or array or \ArrayAccess)*. Its constructor requires the *App or Logger* name. – Optionally, the `$_SERVER` context may pe passed. An optional third parameter turns on IP address anonymizing:
 
 
 ```php
@@ -45,6 +46,30 @@ $dic->register( new LoggerServiceProvider( "My App" );
 $dic->register( new LoggerServiceProvider( "My App", $_SERVER, false ));
 ```
 
+
+
+### Pimple is not required. 
+
+**The service providers cope with *Arrays* and *\ArrayAccess* instances as well.**
+
+Work with an array as base for another, more modern DI container. The register method amends and returns the passed array:
+
+```php
+$dic = array();
+$dic = (new LoggerServiceProvider( "My App" ))->register($dic)
+```
+
+Or pass another DI container which implements *\ArrayAccess:*
+
+```php
+$dic = new MyContainer();
+(new LoggerServiceProvider( "My App" ))->register($dic);
+```
+
+
+
+
+
 ### Services provided
 
 This ***Monolog Logger*** instance is your PSR-3 Logger:
@@ -52,9 +77,13 @@ This ***Monolog Logger*** instance is your PSR-3 Logger:
 ```php
 <?php
 use Psr\Log\LoggerInterface;
+use Monolog\Logger as MonologLogger;
 
 // These are equal and refer to the same instance:
 $logger = $dic[LoggerInterface::class];
+$logger = $dic[MonologLogger::class];
+
+// Deprecated service names
 $logger = $dic['Monolog.Psr3Logger'];
 $logger = $dic['Logger'];
 
@@ -87,7 +116,7 @@ print_r($processors); // Array ...
 *Monolog handlers* are provided by Pimple services. Grab the handler instance and add another *Monolog Processor* by extending the service definition:
 
 ```php
-$dic->extend('Monolog.Handlers.RotatingFileHandler', function($handler, $dic) {
+$dic->extend( \Monolog\Handler\RotatingFileHandler::class, function($handler, $dic) {
   $handler->pushProcessor( new \Monolog\Processor\IntrospectionProcessor );
   return $handler;
 });
@@ -106,9 +135,19 @@ To set the loglevel, pass *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g. 
 ```php
 <?php
 use Germania\Logger\FileLoggerServiceProvider;
-  
+
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new FileLoggerServiceProvider( "log/app.log" ));
 $dic->register( new FileLoggerServiceProvider( "log/app.log", 30, \Monolog\Logger::DEBUG));
+
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new FileLoggerServiceProvider( "log/app.log" ))->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new FileLoggerServiceProvider( "log/app.log" ))->register($dic);
 ```
 
 **Retrieve the Monolog handler**
@@ -117,6 +156,7 @@ This handler is an instance of `\Monolog\Handler\RotatingFileHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.RotatingFileHandler'];
+$handler = $dic[\Monolog\Handler\RotatingFileHandler::class];
 ```
 
 
@@ -131,8 +171,18 @@ Class **StreamLoggerServiceProvider** accepts optional parameters for an *output
 <?php
 use Germania\Logger\StreamLoggerServiceProvider;
 
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new StreamLoggerServiceProvider );
 $dic->register( new StreamLoggerServiceProvider("php://stderr", \Monolog\Logger::WARNING) );
+
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new StreamLoggerServiceProvider())->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new StreamLoggerServiceProvider())->register($dic);
 ```
 
 **Retrieve the Monolog handler**
@@ -141,9 +191,10 @@ This handler is an instance of `\Monolog\Handler\StreamHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.StreamHandler'];
+$handler = $dic[\Monolog\Handler\StreamHandler::class];
 ```
 
-#### 
+
 
 ### Log using SwiftMailer
 
@@ -162,8 +213,18 @@ The *outer loglevel* (default: `Monolog\Logger::WARNING`) will trigger Monolog's
 <?php
 use Germania\Logger\SwiftMailerLoggerServiceProvider;
 
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new SwiftMailerLoggerServiceProvider );
 $dic->register( new SwiftMailerLoggerServiceProvider( \Monolog\Logger::WARNING ));
+
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new SwiftMailerLoggerServiceProvider)->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new SwiftMailerLoggerServiceProvider)->register($dic);
 ```
 
 **Retrieve the Monolog handler**
@@ -174,9 +235,10 @@ which wraps an instance of `Monolog\Handler\SwiftMailerHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.SwiftMailerHandler'];
+$handler = $dic[\Monolog\Handler\SwiftMailerHandler::class];
 ```
 
-#### 
+
 
 ### Log using CLImate Logger
 
@@ -191,7 +253,17 @@ Class **ClimateLoggerServiceProvider** requires a *Monolog Loglevel constant* or
 <?php
 use Germania\Logger\ClimateLoggerServiceProvider;
 
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new ClimateLoggerServiceProvider( \Monolog\Logger::DEBUG ));
+
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new ClimateLoggerServiceProvider( \Monolog\Logger::DEBUG ))->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new ClimateLoggerServiceProvider( \Monolog\Logger::DEBUG ))->register($dic);
 ```
 
 **Retrieve the Monolog handler**
@@ -202,7 +274,7 @@ N.B. This is actually a `Monolog\Handler\PsrHandler`instance which wraps a Clima
 $handler = $dic['Climate.PsrLogger.MonologHandler'];
 ```
 
-#### 
+
 
 ### Log using BrowserConsole Logger
 
@@ -212,8 +284,18 @@ Class **BrowserConsoleLoggerServiceProvider** optionally accepts a *Monolog Logl
 <?php
 use Germania\Logger\BrowserConsoleLoggerServiceProvider;
 
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new BrowserConsoleLoggerServiceProvider );
 $dic->register( new BrowserConsoleLoggerServiceProvider( \Monolog\Logger::INFO ));
+
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new ClimateLoggerServiceProvider)->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new ClimateLoggerServiceProvider)->register($dic);
 ```
 
 **Retrieve the Monolog handler**
@@ -222,9 +304,10 @@ The handler is an instance of `Monolog\Handler\BrowserConsoleHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.BrowserConsoleHandler'];
+$handler = $dic[\Monolog\Handler\BrowserConsoleHandler::class];
 ```
 
-#### 
+
 
 ### Log to Microsoft Teams
 
@@ -233,7 +316,7 @@ $handler = $dic['Monolog.Handlers.BrowserConsoleHandler'];
 This requires CMDISP's **[monolog-microsoft-teams](https://github.com/cmdisp/monolog-microsoft-teams)** package, available via Composer: **[cmdisp/monolog-microsoft-teams](cmdisp/monolog-microsoft-teams)**. 
 
 ```bash
-$ composer require cmdisp/monolog-microsoft-teams "^1.1"
+$ composer require cmdisp/monolog-microsoft-teams "^1.2"
 ```
 
 Class **TeamsLoggerServiceProvider** requires a *[Incoming Webhook URL](https://docs.microsoft.com/de-de/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook)* string, and optionally a *Monolog Loglevel constant* or *PSR-3 LogLevel* (e.g.  `Monolog\Logger::DEBUG` or `\Psr\Log\LogLevel::INFO`). Registering this ServiceProvider to a Pimple DI container will silently skip if the Webhook URL is empty.
@@ -245,8 +328,18 @@ use Monolog\Logger;
 
 $incoming_webhook_url="https://outlook.office.com/webhook/many-many-letters";
 
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new TeamsLoggerServiceProvider( $incoming_webhook_url ));
 $dic->register( new TeamsLoggerServiceProvider( $incoming_webhook_url, \Monolog\Logger::NOTICE ));
+
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new TeamsLoggerServiceProvider( $incoming_webhook_url ))->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new TeamsLoggerServiceProvider( $incoming_webhook_url ))->register($dic);
 ```
 
 #### Deprecation notice
@@ -259,9 +352,10 @@ The handler is an instance of `\CMDISP\MonologMicrosoftTeams\TeamsLogHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.TeamsHandler'];
+$handler = $dic[\CMDISP\MonologMicrosoftTeams\TeamsLogHandler::class];
 ```
 
-#### 
+
 
 ### Log to Slack channel
 
@@ -276,6 +370,10 @@ For more information on using Slack as Logger, see these links:
 <?php
 use Germania\Logger\SlackLoggerServiceProvider;
 
+
+
+// Use with Pimple
+$dic = new \Pimple\Container();
 $dic->register( new SlackLoggerServiceProvider(
   $slack_token,
   $slack_channel,
@@ -283,6 +381,13 @@ $dic->register( new SlackLoggerServiceProvider(
   \Monolog\Logger::CRITICAL
 ));
 
+// Use with \ArrayAccess
+$dic = new \Pimple\Container();
+(new SlackLoggerServiceProvider( ... ))->register($dic);
+
+// Use with array
+$dic = array();
+$dic = (new SlackLoggerServiceProvider( ... ))->register($dic);
 
 ```
 
@@ -292,9 +397,10 @@ The handler is an instance of `\Monolog\Handler\SlackHandler`
 
 ```php
 $handler = $dic['Monolog.Handlers.SlackHandler'];
+$handler = $dic[\Monolog\Handler\SlackHandler::class];
 ```
 
-#### 
+
 
 ---
 
@@ -310,7 +416,9 @@ use Monolog\Logger as Monolog;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-// 1. Basic setup
+// 1. Basic setup: Pimple
+$dic = new \Pimple\Container();
+
 $log_name     = "My App";
 $anonymize_ip = true;
 $server_data  = $_SERVER;
@@ -321,13 +429,11 @@ $dic->register( new LoggerServiceProvider(
   $anonymize_ip
 ));
 
-
 // 2. The 'LoggerServiceProvider' alone won't do anything.
 //    So, adding a specialized Service Provider is needed:
 $max_files_count = 30;
 $dic->register( new FileLoggerServiceProvider("log/app.log", 30, Monolog::DEBUG ));
 $dic->register( new FileLoggerServiceProvider("log/app.log", 30, LogLevel::DEBUG ));
-
 
 // 3. Now you can grab your PSR-3 Logger:
 $logger = $dic[LoggerInterface::class];
