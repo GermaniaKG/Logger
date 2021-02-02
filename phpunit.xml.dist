@@ -10,13 +10,13 @@
       <text outputFile="php://stdout" showUncoveredFiles="true"/>
     </report>
   </coverage>
+
   <testsuites>
-    <testsuite name="Test Suite">
+    <testsuite name="unit">
       <directory>tests/src</directory>
-      <!-- Disclose this one until package cmdisp/monolog-microsoft-teams allows PHP 8 -->
-      <exclude>tests/src/TeamsLoggerServiceProviderTest.php</exclude>
     </testsuite>
   </testsuites>
+
   <logging>
     <testdoxHtml outputFile="var/build/logs/testdox.html"/>
     <testdoxText outputFile="var/build/logs/testdox.txt"/>

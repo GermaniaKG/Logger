@@ -22,7 +22,7 @@ class TeamsLoggerServiceProviderTest extends \PHPUnit\Framework\TestCase
 		$sut = new TeamsLoggerServiceProvider("webhook", LogLevel::INFO );
 		$this->assertInstanceOf( ServiceProviderInterface::class, $sut);
 
-        return TeamsLoggerServiceProvider;
+        return $sut;
 	}
 
 
